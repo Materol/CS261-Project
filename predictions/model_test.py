@@ -2,7 +2,7 @@
 
 import unittest
 
-from predictions.critical_success_factors import CSF
+from predictions.critical_success_factors import CSF, ALL_CSFS
 
 
 class TestPredictionModel(unittest.TestCase):
@@ -24,6 +24,13 @@ class TestPredictionModel(unittest.TestCase):
 
         self.assertEqual(csf1, csf2)
         self.assertNotEqual(csf1, csf3)
+
+    def test_csf_array(self):
+        """Test that we have 24 CSFs in total and that all are unique."""
+        csfs = set(ALL_CSFS)
+
+        self.assertEqual(len(csfs), 24)
+        self.assertEqual(len(ALL_CSFS), 24)
 
 
 if __name__ == '__main__':
