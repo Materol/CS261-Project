@@ -10,17 +10,18 @@ class TestPredictionModel(unittest.TestCase):
 
     def test_csf_init(self):
         """Test the CSF class."""
-        csf = CSF("test name", "test description")
+        csf = CSF("test name", "test description", "test question")
 
         self.assertEqual(csf.name, "test name")
         self.assertEqual(csf.description, "test description")
+        self.assertEqual(csf.question, "test question")
 
     def test_csf_equality(self):
         """Test that two CSFs are equal if they have the same name."""
-        csf1 = CSF("test name", "1")
-        csf2 = CSF("test name", "2")
+        csf1 = CSF("test name", "1", "some question")
+        csf2 = CSF("test name", "2", "not the same question")
 
-        csf3 = CSF("other name", "1")
+        csf3 = CSF("other name", "1", "some question")
 
         self.assertEqual(csf1, csf2)
         self.assertNotEqual(csf1, csf3)
