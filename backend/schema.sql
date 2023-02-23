@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS project CASCADE;
 DROP TABLE IF EXISTS member_role_history CASCADE;
 DROP TABLE IF EXISTS project_role CASCADE;
 DROP TABLE IF EXISTS job_title CASCADE;
-DROP TABLE IF EXISTS person CASCADE;
+DROP TABLE IF EXISTS people CASCADE;
 DROP TABLE IF EXISTS reports_to CASCADE;
 DROP TABLE IF EXISTS project_history CASCADE;
 
@@ -33,7 +33,7 @@ CREATE TABLE project (
 -- each item in ProjectHistory must refernece a project in Project table
 CREATE TABLE project_history (
     id SERIAL PRIMARY KEY,
-    project_id INTEGER REFERENCES Project(id),
+    project_id INTEGER REFERENCES project(id),
     title VARCHAR(100) NOT NULL,
     project_description VARCHAR(800) NOT NULL,
     csf VARCHAR(100) NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE job_title (
 );
 
 -- each defined person is unique
-CREATE TABLE person (
+CREATE TABLE people (
     id SERIAL PRIMARY KEY,
     job_title_id INTEGER REFERENCES job_title(id),
     email VARCHAR(100) NOT NULL,
@@ -65,13 +65,13 @@ CREATE TABLE person (
 CREATE TABLE member_role_history (
     -- projectID INTEGER REFERENCES Project(projectID),
     history_id INTEGER REFERENCES project_history(id),
-    person_id INTEGER REFERENCES person(id),
+    people_id INTEGER REFERENCES people(id),
     role_id INTEGER REFERENCES project_role(id)
 );
 
 -- every person may need to report to many people and they also may manage many people,
 -- hence no primary key in this table. 
 CREATE TABLE reports_to (
-    reportee_id INTEGER REFERENCES person(id),
-    manager_id INTEGER REFERENCES person(id)
+    reportee_id INTEGER REFERENCES people(id),
+    manager_id INTEGER REFERENCES people(id)
 );
