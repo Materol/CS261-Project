@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS Project CASCADE;
-DROP TABLE IF EXISTS MemberRoleHistory CASCADE;
-DROP TABLE IF EXISTS ProjectRole CASCADE;
-DROP TABLE IF EXISTS JobTitle CASCADE;
-DROP TABLE IF EXISTS Person CASCADE;
-DROP TABLE IF EXISTS ReportsTo CASCADE;
-DROP TABLE IF EXISTS ProjectHistory CASCADE;
+DROP TABLE IF EXISTS project CASCADE;
+DROP TABLE IF EXISTS member_role_history CASCADE;
+DROP TABLE IF EXISTS project_role CASCADE;
+DROP TABLE IF EXISTS job_title CASCADE;
+DROP TABLE IF EXISTS person CASCADE;
+DROP TABLE IF EXISTS reports_to CASCADE;
+DROP TABLE IF EXISTS project_history CASCADE;
 
 /*
     Table design based on Entity Relationship Diagram provided in the Design Document
@@ -24,54 +24,54 @@ DROP TABLE IF EXISTS ProjectHistory CASCADE;
 */
 
 -- Every project is unique 
-CREATE TABLE Project (
-    projectID SERIAL PRIMARY KEY,
+CREATE TABLE project (
+    id SERIAL PRIMARY KEY,
     createdOn TIMESTAMP NOT NULL,
     completed BOOLEAN NOT NULL
 );
 
 -- each item in ProjectHistory must refernece a project in Project table
-CREATE TABLE ProjectHistory (
-    historyID SERIAL PRIMARY KEY,
-    projectID INTEGER REFERENCES Project(projectID),
+CREATE TABLE project_history (
+    id SERIAL PRIMARY KEY,
+    project_id INTEGER REFERENCES Project(id),
     title VARCHAR(100) NOT NULL,
-    projectDescription VARCHAR(800) NOT NULL,
-    CSFs VARCHAR(100) NOT NULL,
+    project_description VARCHAR(800) NOT NULL,
+    csf VARCHAR(100) NOT NULL,
     feedback VARCHAR(800) NOT NULL,
-    editedOn TIMESTAMP NOT NULL
+    edited_on TIMESTAMP NOT NULL
 );
 
 -- each defined project role in ProjectRole table is unique
-CREATE TABLE ProjectRole (
-    roleID SERIAL PRIMARY KEY,
-    roleTitle VARCHAR(100) NOT NULL
+CREATE TABLE project_role (
+    id SERIAL PRIMARY KEY,
+    role_title VARCHAR(100) NOT NULL
 );
 
 -- each defined job title in JobTitle table is unique
-CREATE TABLE JobTitle (
-    jobTitleID SERIAL PRIMARY KEY,
-    jobType VARCHAR(100) NOT NULL
+CREATE TABLE job_title (
+    id SERIAL PRIMARY KEY,
+    job_type VARCHAR(100) NOT NULL
 );
 
 -- each defined person is unique
-CREATE TABLE Person (
-    personID SERIAL PRIMARY KEY,
-    jobTitleID INTEGER REFERENCES JobTitle(jobTitleID),
+CREATE TABLE person (
+    id SERIAL PRIMARY KEY,
+    job_title_id INTEGER REFERENCES job_title(id),
     email VARCHAR(100) NOT NULL,
-    passwordHash VARCHAR (100)
+    password_hash VARCHAR (100)
 );
 
 -- each person assigned to a project needs to be alloocated a role
-CREATE TABLE MemberRoleHistory (
+CREATE TABLE member_role_history (
     -- projectID INTEGER REFERENCES Project(projectID),
-    historyID INTEGER REFERENCES ProjectHistory(historyID),
-    personID INTEGER REFERENCES Person(personID),
-    roleID INTEGER REFERENCES ProjectRole(roleID)
+    history_id INTEGER REFERENCES project_history(id),
+    person_id INTEGER REFERENCES person(id),
+    role_id INTEGER REFERENCES project_role(id)
 );
 
 -- every person may need to report to many people and they also may manage many people,
 -- hence no primary key in this table. 
-CREATE TABLE ReportsTo (
-    reporteeID INTEGER REFERENCES Person(personID),
-    managerID INTEGER REFERENCES Person(personID)
+CREATE TABLE reports_to (
+    reportee_id INTEGER REFERENCES person(id),
+    manager_id INTEGER REFERENCES person(id)
 );
