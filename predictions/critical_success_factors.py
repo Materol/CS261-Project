@@ -16,7 +16,7 @@ class CSF:
         self.description = description
 
     def __eq__(self, other):
-        return self.name == other.name
+        return self.name == other
 
     def __hash__(self):
         return hash(self.name)
