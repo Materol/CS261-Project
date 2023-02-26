@@ -25,6 +25,8 @@ class TestPredictionModel(unittest.TestCase):
 
         self.assertEqual(csf1, csf2)
         self.assertNotEqual(csf1, csf3)
+        self.assertEqual(csf1, "test name")
+        self.assertNotEqual(csf1, "other name")
 
     def test_csf_array(self):
         """Test that we have 24 CSFs in total and that all are unique."""
