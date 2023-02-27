@@ -1,6 +1,6 @@
 """Extra utilities functions for predictions."""
 
-from typing import Dict
+from typing import Dict, List
 
 from predictions.critical_success_factors import CSF, ALL_CSFS
 from predictions.success_metrics import SuccessMetric, ALL_SUCCESS_METRICS
@@ -18,3 +18,13 @@ def create_prediction_map() -> Dict[SuccessMetric, float]:
 
     Note that actaul values will be between 1.0 and 5.0."""
     return {sm: 0.0 for sm in ALL_SUCCESS_METRICS}
+
+
+def extract_success_values(
+        csf_or_success_metrics: Dict[SuccessMetric, float]) -> List[int]:
+    """Extract and order SuccessMetrics values.
+
+    These values are ordered by their in appearance `ALL_SUCCESS_METRICS`.
+    Values that do not appear in `ALL_SUCCESS_METRICS` are ignored.
+    """
+    return [csf_or_success_metrics[sm] for sm in ALL_SUCCESS_METRICS]
