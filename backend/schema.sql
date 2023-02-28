@@ -68,7 +68,8 @@ CREATE TABLE project_history (
     project_id INTEGER REFERENCES project(id),
     title VARCHAR(100) NOT NULL,
     project_description VARCHAR(800) NOT NULL,
-    csf VARCHAR(100) NOT NULL,
+    csf VARCHAR(600) NOT NULL,
+    success_metric VARCHAR(800) NOT NULL,
     feedback VARCHAR(800) NOT NULL,
     edited_on TIMESTAMP NOT NULL
 );
