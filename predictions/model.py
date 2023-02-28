@@ -18,3 +18,7 @@ class Model:
     ) -> Dict[SuccessMetric, float]:
         """Predict success of a project given a mapping of CSFs to values."""
         raise NotImplementedError("Model.predict() not implemented.")
+
+    def train(train_x, train_y, test_x, test_y):
+        """Train the model."""
+        raise NotImplementedError("Model.train() not implemented.")

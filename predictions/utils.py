@@ -20,6 +20,15 @@ def create_prediction_map() -> Dict[SuccessMetric, float]:
     return {sm: 0.0 for sm in ALL_SUCCESS_METRICS}
 
 
+def extract_csf_values(csf_or_success_metrics: Dict[CSF, int]) -> List[int]:
+    """Extract and order CSFs values.
+
+    These values are ordered by their in appearance `ALL_CSFS`.
+    Values that do not appear in `ALL_CSFS` are ignored.
+    """
+    return [csf_or_success_metrics[csf] for csf in ALL_CSFS]
+
+
 def extract_success_values(
         csf_or_success_metrics: Dict[SuccessMetric, float]) -> List[int]:
     """Extract and order SuccessMetrics values.
