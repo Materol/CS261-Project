@@ -39,7 +39,6 @@ END
 $$ LANGUAGE plpgsql;
 
 -- a reportee cannot report to a manager of the manager reports to the reportee
--- a reportee can also no tmanage themselves
 CREATE OR REPLACE FUNCTION valid_report_manage() RETURNS trigger AS $$
 DECLARE
     reportee INTEGER;
@@ -53,6 +52,19 @@ BEGIN
 END 
 $$ LANGUAGE plpgsql;
 
+-- a reportee can also no tmanage themselves
+CREATE OR REPLACE FUNCTION not_same_manage() RETURNS trigger AS $$
+DECLARE 
+    reportee INTEGER;
+    manager INTEGER;
+BEGIN
+    SELECT RT.reportee_id, RT.manager_id FROM reports_to RT INTO reportee, manager WHERE NEW.manager_id = NEW.reportee_id;
+    IF found THEN
+        RETURN NULL;
+    END IF;
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
 
  
 -- Every project is unique 
@@ -144,7 +156,11 @@ FOR EACH ROW
 EXECUTE PROCEDURE check_edit_on();
 
 -- trigger used to check that a manager doesn't manage a reportee while the reportee manages the manager at the same time
--- bug with first data entry failing to check (reportee_id == manager_id)???
 CREATE TRIGGER check_manage_people BEFORE INSERT OR UPDATE ON reports_to
 FOR EACH ROW
 EXECUTE PROCEDURE valid_report_manage();
+
+-- trigger used to check that a manager does not manage themselves
+CREATE TRIGGER check_equal_manage AFTER INSERT OR UPDATE ON reports_to
+FOR EACH ROW
+EXECUTE PROCEDURE not_same_manage();
