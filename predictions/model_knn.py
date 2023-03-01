@@ -57,7 +57,6 @@ class ModelKNN(Model):
 
         self.trained_params = trained_params
 
-
     def predict(
         self,
         critical_success_factors_values: Dict[CSF, int],

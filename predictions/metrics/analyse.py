@@ -20,9 +20,7 @@ class Analyser:
 
         return all_model_errors
 
-
     def analyse_model(predictions, test_labels):
-
         """Analyse the performance of a model by calculating error metrics."""
         errors = {
             'MAE':
