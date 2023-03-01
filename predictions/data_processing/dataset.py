@@ -17,6 +17,7 @@ from predictions.critical_success_factors import ALL_CSFS
 from predictions.success_metrics import ALL_SUCCESS_METRICS
 from predictions.utils import create_csf_map, create_prediction_map, extract_csf_values, extract_success_values
 
+
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data.csv')
 
 

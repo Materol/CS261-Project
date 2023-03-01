@@ -8,6 +8,7 @@ from predictions.success_metrics import ALL_SUCCESS_METRICS
 from predictions.utils import extract_csf_values, extract_success_values
 
 
+
 class TestDataset(unittest.TestCase):
     """Tests for dataset functions."""
 
@@ -49,6 +50,7 @@ class TestDataset(unittest.TestCase):
 
         self.assertEqual(extracted_csf_values, actual_csf_values)
         self.assertEqual(extracted_sm_values, actual_sm_values)
+
 
 
 if __name__ == '__main__':
