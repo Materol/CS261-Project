@@ -6,10 +6,12 @@ from predictions.critical_success_factors import CSF, ALL_CSFS
 from predictions.success_metrics import SuccessMetric, ALL_SUCCESS_METRICS
 
 
-def create_csf_map() -> Dict[CSF, int]:
-    """Create a mapping from CSFs to 0.
+def create_csf_map(values=None) -> Dict[CSF, int]:
+    """Create a mapping from CSFs to a default value of 0.
 
     Note that actaul values will be between 1.0 and 5.0."""
+    if values != None:
+        return {csf: value for csf, value in zip(ALL_CSFS, values)}
     return {csf: 0 for csf in ALL_CSFS}
 
 
