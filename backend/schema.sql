@@ -30,13 +30,14 @@ CREATE OR REPLACE FUNCTION check_edit_on() RETURNS trigger AS $$
 DECLARE 
     projectid INTEGER;
 BEGIN
-    SELECT PH.id FROM project P INNER JOIN project_history PH ON P.id = PH.project_id INTO projectid WHERE NEW.edited_on < P.created_on;
+    SELECT PH.id FROM project P INNER JOIN project_history PH ON P.id = PH.project_id INTO projectid WHERE NEW.project_id = P.id AND NEW.edited_on < P.created_on;
     IF found THEN
         RETURN NULL;
     END IF;
     RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
+
 
 -- a reportee cannot report to a manager of the manager reports to the reportee
 CREATE OR REPLACE FUNCTION valid_report_manage() RETURNS trigger AS $$
@@ -52,6 +53,7 @@ BEGIN
 END 
 $$ LANGUAGE plpgsql;
 
+
 -- a reportee can also no tmanage themselves
 CREATE OR REPLACE FUNCTION not_same_manage() RETURNS trigger AS $$
 DECLARE 
@@ -66,7 +68,71 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
+
+-- function to enter new project_history
+/*
+    Reuirements:
+        - Enter each new field
+        - Check if given project_id is not NULL in the project table
+        - handle exceptions by returnong -1 and error message
+        - function should return the id of the new project_history, otherise -1 if exceptions encountered
+*/
+
+CREATE OR REPLACE FUNCTION new_project_history (
+    projectID INTEGER,
+    projectTitle VARCHAR(100),
+    projectDescription VARCHAR(800),
+    CSF VARCHAR(600),
+    successMetric VARCHAR(800),
+    projectFeedback VARCHAR(800),
+    editedOn TIMESTAMP
+)
+    RETURNS INTEGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE 
+    p_id INTEGER;
+    history_id INTEGER;
+BEGIN
+    -- check if projectID exists
+    SELECT id FROM project WHERE projectID = id INTO p_id;
+    -- raise exception if no id is found
+    IF p_id IS NULL THEN    
+        RAISE EXCEPTION 'project_id % does not exist.', projectID;
+    END IF;
+
+    -- must enter a history id
+    -- get the last history id and increment by 1
+    -- if none exist, set to 1
+
+    SELECT id FROM project_history INTO history_id ORDER BY id DESC LIMIT 1;
+    IF found THEN 
+        history_id := history_id + 1;
+    ELSE
+        history_id := 1;
+    END IF;
+
+    WITH insert_project_history AS (
+        INSERT INTO project_history (id, project_id, title, project_description, csf, success_metric, feedback, edited_on)
+        VALUES (
+            history_id, projectID, projectTitle, projectDescription, CSF, successMetric, projectFeedback, editedOn
+        )
+        RETURNING id
+    )
+    SELECT id INTO history_id FROM insert_project_history;
+    RETURN history_id;
+
+EXCEPTION
+    WHEN OTHERS THEN 
+        RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
+    RETURN -1;
+END;
+$$;
+
  
+
+
+
 -- Every project is unique 
 CREATE TABLE project (
     id SERIAL PRIMARY KEY,
