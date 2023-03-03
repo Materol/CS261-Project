@@ -69,6 +69,124 @@ END
 $$ LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION new_project (
+    createdOn TIMESTAMP,
+    complete BOOLEAN
+)
+    RETURNS INTEGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    p_id INTEGER;
+BEGIN
+    -- identify key position
+    SELECT id FROM project INTO p_id ORDER BY id DESC LIMIT 1;
+    IF found THEN 
+        p_id := p_id + 1;
+    ELSE
+        p_id := 1;
+    END IF;
+
+    -- insert new project into database
+    WITH insert_project AS (
+        INSERT INTO project (id, created_on, completed)
+        VALUES ( 
+            p_id, createdOn, complete
+        )
+        RETURNING id
+    )
+    SELECT id INTO p_id FROM insert_project;
+    RETURN p_id;
+EXCEPTION
+    WHEN OTHERS THEN 
+        RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
+    RETURN -1;
+END;
+$$; 
+
+
+CREATE OR REPLACE FUNCTION new_job_title (
+    jobType VARCHAR(100)
+)
+    RETURNS INTEGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE 
+    jt_id INTEGER;
+BEGIN 
+    -- identify key position
+    SELECT id FROM job_title INTO jt_id ORDER BY id DESC LIMIT 1;
+    IF found THEN 
+        jt_id := jt_id + 1;
+    ELSE
+        jt_id := 1;
+    END IF;
+
+    -- insert new job title into database
+    WITH insert_project AS (
+        INSERT INTO job_title (id, job_type)
+        VALUES ( 
+            jt_id, jobType
+        )
+        RETURNING id
+    )
+    SELECT id INTO jt_id FROM insert_project;
+    RETURN jt_id;
+EXCEPTION
+    WHEN OTHERS THEN 
+        RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
+    RETURN -1;
+END;
+$$; 
+
+
+-- check if job_title_id exists before inserting new person
+CREATE OR REPLACE FUNCTION new_people (
+    jobTitleID INTEGER,
+    emaill VARCHAR(100),
+    passwordHash VARCHAR(100)
+)
+    RETURNS INTEGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE 
+    peopleID INTEGER;
+    jt_id INTEGER;
+BEGIN 
+    -- identify key position
+    SELECT id FROM people INTO peopleID ORDER BY id DESC LIMIT 1;
+    IF found THEN 
+        peopleID := peopleID + 1;
+    ELSE
+        peopleID := 1;
+    END IF;
+
+    -- does job_title_id exist
+    SELECT id FROM job_title WHERE jobTitleID = id INTO jt_id;
+    -- raise exception if no id is found
+    IF jt_id IS NULL THEN    
+        RAISE EXCEPTION 'job_title_id % does not exist.', projectID;
+    END IF;
+
+    -- insert new job title into database
+    WITH insert_people AS (
+        INSERT INTO people (id, job_title_id, email, password_hash)
+        VALUES ( 
+            peopleID, jt_id, emaill, passwordHash
+        )
+        RETURNING id
+    )
+    SELECT id INTO peopleID FROM insert_people;
+    RETURN peopleID;
+EXCEPTION
+    WHEN OTHERS THEN 
+        RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
+    RETURN -1;
+END;
+$$;
+
+
+
 -- function to enter new project_history
 /*
     Reuirements:
@@ -128,8 +246,6 @@ EXCEPTION
     RETURN -1;
 END;
 $$;
-
- 
 
 
 
