@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     # The GitHub repo must be public
     stats.github_issues('microsoft/WSL')
-    stats.asana_tasks('microsoft/WSL')
+    stats.asana_tasks('WSL')
 
 
 
