@@ -80,18 +80,18 @@ DECLARE
     p_id INTEGER;
 BEGIN
     -- identify key position
-    SELECT id FROM project INTO p_id ORDER BY id DESC LIMIT 1;
-    IF found THEN 
-        p_id := p_id + 1;
-    ELSE
-        p_id := 1;
-    END IF;
+    -- SELECT id FROM project INTO p_id ORDER BY id DESC LIMIT 1;
+    -- IF found THEN 
+    --     p_id := p_id + 1;
+    -- ELSE
+    --     p_id := 1;
+    -- END IF;
 
     -- insert new project into database
     WITH insert_project AS (
-        INSERT INTO project (id, created_on, completed)
+        INSERT INTO project (created_on, completed)
         VALUES ( 
-            p_id, createdOn, complete
+            createdOn, complete
         )
         RETURNING id
     )
@@ -115,18 +115,18 @@ DECLARE
     jt_id INTEGER;
 BEGIN 
     -- identify key position
-    SELECT id FROM job_title INTO jt_id ORDER BY id DESC LIMIT 1;
-    IF found THEN 
-        jt_id := jt_id + 1;
-    ELSE
-        jt_id := 1;
-    END IF;
+    -- SELECT id FROM job_title INTO jt_id ORDER BY id DESC LIMIT 1;
+    -- IF found THEN 
+    --     jt_id := jt_id + 1;
+    -- ELSE
+    --     jt_id := 1;
+    -- END IF;
 
     -- insert new job title into database
     WITH insert_project AS (
-        INSERT INTO job_title (id, job_type)
+        INSERT INTO job_title (job_type)
         VALUES ( 
-            jt_id, jobType
+            jobType
         )
         RETURNING id
     )
@@ -154,12 +154,12 @@ DECLARE
     jt_id INTEGER;
 BEGIN 
     -- identify key position
-    SELECT id FROM people INTO peopleID ORDER BY id DESC LIMIT 1;
-    IF found THEN 
-        peopleID := peopleID + 1;
-    ELSE
-        peopleID := 1;
-    END IF;
+    -- SELECT id FROM people INTO peopleID ORDER BY id DESC LIMIT 1;
+    -- IF found THEN 
+    --     peopleID := peopleID + 1;
+    -- ELSE
+    --     peopleID := 1;
+    -- END IF;
 
     -- does job_title_id exist
     SELECT id FROM job_title WHERE jobTitleID = id INTO jt_id;
@@ -170,9 +170,9 @@ BEGIN
 
     -- insert new job title into database
     WITH insert_people AS (
-        INSERT INTO people (id, job_title_id, email, password_hash)
+        INSERT INTO people (job_title_id, email, password_hash)
         VALUES ( 
-            peopleID, jt_id, emaill, passwordHash
+            jt_id, emaill, passwordHash
         )
         RETURNING id
     )
@@ -223,17 +223,17 @@ BEGIN
     -- get the last history id and increment by 1
     -- if none exist, set to 1
 
-    SELECT id FROM project_history INTO history_id ORDER BY id DESC LIMIT 1;
-    IF found THEN 
-        history_id := history_id + 1;
-    ELSE
-        history_id := 1;
-    END IF;
+    -- SELECT id FROM project_history INTO history_id ORDER BY id DESC LIMIT 1;
+    -- IF found THEN 
+    --     history_id := history_id + 1;
+    -- ELSE
+    --     history_id := 1;
+    -- END IF;
 
     WITH insert_project_history AS (
-        INSERT INTO project_history (id, project_id, title, project_description, csf, success_metric, feedback, edited_on)
+        INSERT INTO project_history (project_id, title, project_description, csf, success_metric, feedback, edited_on)
         VALUES (
-            history_id, projectID, projectTitle, projectDescription, CSF, successMetric, projectFeedback, editedOn
+            projectID, projectTitle, projectDescription, CSF, successMetric, projectFeedback, editedOn
         )
         RETURNING id
     )
