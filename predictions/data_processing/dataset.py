@@ -9,10 +9,14 @@ empirical investigation. Software Quality Journal, 27, 429-493.
 """
 
 import os
+import numpy as np
+import random
 
+from typing import List
 from predictions.critical_success_factors import ALL_CSFS
 from predictions.success_metrics import ALL_SUCCESS_METRICS
-from predictions.utils import create_csf_map, create_prediction_map
+from predictions.utils import create_csf_map, create_prediction_map, extract_csf_values, extract_success_values
+
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data.csv')
 
@@ -93,3 +97,61 @@ def load_dataset():
         dataset.append([csfs, success_metrics])
 
     return dataset
+
+
+def split_dataset(dataset, ratio, shuffle=True, seed=42):
+    """Split the dataset into training and testing sets.
+
+    The ratio is the percentage of the dataset to use for training (the rest
+    is used for testing). By default the dataset is shuffled before splitting.
+    """
+    if shuffle:
+        np.random.seed(seed)
+        perm = np.random.permutation(len(dataset[0]))
+
+        data = dataset[0][perm]
+        labels = dataset[1][perm]
+        dataset = [data, labels]
+
+    split_index = int(len(dataset[0]) * ratio)
+
+    train_data = dataset[0][:split_index]
+    train_labels = dataset[1][:split_index]
+
+    test_data = dataset[0][split_index:]
+    test_labels = dataset[1][split_index:]
+
+    return [train_data, train_labels], [test_data, test_labels]
+
+def to_numpy(dataset) -> List[np.ndarray]:
+    """Converts the dataset to two numpy arrays."""
+    csfs = []
+    success_metrics = []
+    for row in dataset:
+        csfs.append(extract_csf_values(row[0]))
+        success_metrics.append(extract_success_values(row[1]))
+
+    csfs = np.array(csfs)
+    success_metrics = np.array(success_metrics)
+
+    return csfs, success_metrics
+
+def replace_zeros(values: np.ndarray):
+    """Replace zeros in with the median of the column.
+
+    This is used for csfs and success metrics. Zero values are not included in
+    the median calculation.
+    """
+    medians = []
+
+    for column in values.T:
+        non_zero = [value for value in column if value != 0]
+        median = np.median(non_zero)
+        medians.append(median)
+
+    for i, row in enumerate(values):
+        for j, value in enumerate(row):
+            if value == 0:
+                values[i][j] = medians[j]
+
+    return values
