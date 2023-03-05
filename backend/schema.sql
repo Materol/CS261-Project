@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS project_history CASCADE;
 
 -- edited_on time cannot be earlier than created_on time
 CREATE OR REPLACE FUNCTION check_edit_on() RETURNS trigger AS $$
-DECLARE 
+DECLARE
     projectid INTEGER;
 BEGIN
     SELECT PH.id FROM project P INNER JOIN project_history PH ON P.id = PH.project_id INTO projectid WHERE NEW.project_id = P.id AND NEW.edited_on < P.created_on;
@@ -50,13 +50,13 @@ BEGIN
         RETURN NULL;
     END IF;
     RETURN NEW;
-END 
+END
 $$ LANGUAGE plpgsql;
 
 
 -- a reportee can also no tmanage themselves
 CREATE OR REPLACE FUNCTION not_same_manage() RETURNS trigger AS $$
-DECLARE 
+DECLARE
     reportee INTEGER;
     manager INTEGER;
 BEGIN
@@ -79,18 +79,10 @@ AS $$
 DECLARE
     p_id INTEGER;
 BEGIN
-    -- identify key position
-    -- SELECT id FROM project INTO p_id ORDER BY id DESC LIMIT 1;
-    -- IF found THEN 
-    --     p_id := p_id + 1;
-    -- ELSE
-    --     p_id := 1;
-    -- END IF;
-
     -- insert new project into database
     WITH insert_project AS (
         INSERT INTO project (created_on, completed)
-        VALUES ( 
+        VALUES (
             createdOn, complete
         )
         RETURNING id
@@ -98,11 +90,11 @@ BEGIN
     SELECT id INTO p_id FROM insert_project;
     RETURN p_id;
 EXCEPTION
-    WHEN OTHERS THEN 
+    WHEN OTHERS THEN
         RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
     RETURN -1;
 END;
-$$; 
+$$;
 
 
 CREATE OR REPLACE FUNCTION new_job_title (
@@ -111,21 +103,13 @@ CREATE OR REPLACE FUNCTION new_job_title (
     RETURNS INTEGER
     LANGUAGE plpgsql
 AS $$
-DECLARE 
+DECLARE
     jt_id INTEGER;
-BEGIN 
-    -- identify key position
-    -- SELECT id FROM job_title INTO jt_id ORDER BY id DESC LIMIT 1;
-    -- IF found THEN 
-    --     jt_id := jt_id + 1;
-    -- ELSE
-    --     jt_id := 1;
-    -- END IF;
-
+BEGIN
     -- insert new job title into database
     WITH insert_project AS (
         INSERT INTO job_title (job_type)
-        VALUES ( 
+        VALUES (
             jobType
         )
         RETURNING id
@@ -133,58 +117,49 @@ BEGIN
     SELECT id INTO jt_id FROM insert_project;
     RETURN jt_id;
 EXCEPTION
-    WHEN OTHERS THEN 
+    WHEN OTHERS THEN
         RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
     RETURN -1;
 END;
-$$; 
+$$;
 
 
 -- check if job_title_id exists before inserting new person
 CREATE OR REPLACE FUNCTION new_people (
     jobTitleID INTEGER,
-    emaill VARCHAR(100),
+    email VARCHAR(100),
     passwordHash VARCHAR(100)
 )
     RETURNS INTEGER
     LANGUAGE plpgsql
 AS $$
-DECLARE 
+DECLARE
     peopleID INTEGER;
     jt_id INTEGER;
-BEGIN 
-    -- identify key position
-    -- SELECT id FROM people INTO peopleID ORDER BY id DESC LIMIT 1;
-    -- IF found THEN 
-    --     peopleID := peopleID + 1;
-    -- ELSE
-    --     peopleID := 1;
-    -- END IF;
-
+BEGIN
     -- does job_title_id exist
     SELECT id FROM job_title WHERE jobTitleID = id INTO jt_id;
     -- raise exception if no id is found
-    IF jt_id IS NULL THEN    
-        RAISE EXCEPTION 'job_title_id % does not exist.', projectID;
+    IF jt_id IS NULL THEN
+        RAISE EXCEPTION 'job_title_id % does not exist.', jobTitleID;
     END IF;
 
     -- insert new job title into database
     WITH insert_people AS (
         INSERT INTO people (job_title_id, email, password_hash)
-        VALUES ( 
-            jt_id, emaill, passwordHash
+        VALUES (
+            jt_id, email, passwordHash
         )
         RETURNING id
     )
     SELECT id INTO peopleID FROM insert_people;
     RETURN peopleID;
 EXCEPTION
-    WHEN OTHERS THEN 
+    WHEN OTHERS THEN
         RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
     RETURN -1;
 END;
 $$;
-
 
 
 -- function to enter new project_history
@@ -208,27 +183,16 @@ CREATE OR REPLACE FUNCTION new_project_history (
     RETURNS INTEGER
     LANGUAGE plpgsql
 AS $$
-DECLARE 
+DECLARE
     p_id INTEGER;
     history_id INTEGER;
 BEGIN
     -- check if projectID exists
     SELECT id FROM project WHERE projectID = id INTO p_id;
     -- raise exception if no id is found
-    IF p_id IS NULL THEN    
+    IF p_id IS NULL THEN
         RAISE EXCEPTION 'project_id % does not exist.', projectID;
     END IF;
-
-    -- must enter a history id
-    -- get the last history id and increment by 1
-    -- if none exist, set to 1
-
-    -- SELECT id FROM project_history INTO history_id ORDER BY id DESC LIMIT 1;
-    -- IF found THEN 
-    --     history_id := history_id + 1;
-    -- ELSE
-    --     history_id := 1;
-    -- END IF;
 
     WITH insert_project_history AS (
         INSERT INTO project_history (project_id, title, project_description, csf, success_metric, feedback, edited_on)
@@ -241,7 +205,7 @@ BEGIN
     RETURN history_id;
 
 EXCEPTION
-    WHEN OTHERS THEN 
+    WHEN OTHERS THEN
         RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
     RETURN -1;
 END;
@@ -249,9 +213,9 @@ $$;
 
 
 
--- Every project is unique 
+-- Every project is unique
 CREATE TABLE project (
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY NOT NULL,
     created_on TIMESTAMP NOT NULL,
     completed BOOLEAN NOT NULL
 );
@@ -297,7 +261,7 @@ CREATE TABLE member_role_history (
 );
 
 -- every person may need to report to many people and they also may manage many people,
--- hence no primary key in this table. 
+-- hence no primary key in this table.
 CREATE TABLE reports_to (
     reportee_id INTEGER REFERENCES people(id),
     manager_id INTEGER REFERENCES people(id)
@@ -308,7 +272,7 @@ CREATE TABLE reports_to (
 ------------------------------------------------------------------------------------------------
 -- get person passwords
 CREATE OR REPLACE VIEW get_passwords AS
-SELECT P.id, P.password_hash FROM people P; 
+SELECT P.id, P.password_hash FROM people P;
 
 -- get icompleted projects
 CREATE OR REPLACE VIEW uncomplete_project AS
@@ -320,15 +284,15 @@ SELECT P.id, P.created_on FROM project P WHERE completed = 'true';
 
 -- get emails of people on a project name with the role of each person
 CREATE OR REPLACE VIEW project_people AS
-SELECT project_id, title, people_id, email, role_title FROM 
+SELECT project_id, title, people_id, email, role_title FROM
 (SELECT project_id, title, members.people_id, role_title FROM
 (SELECT PH.project_id, PH.title, MH.people_id, role_id FROM project_history PH INNER JOIN member_role_history MH ON PH.id = MH.history_id) as members
-INNER JOIN 
+INNER JOIN
 (SELECT id, role_title FROM project_role) as PR
 ON members.role_id = PR.id) AS table1
 INNER JOIN
 (SELECT id, email FROM people) AS table2
-ON table1.people_id = table2.id; 
+ON table1.people_id = table2.id;
 
 -----------------------------------------------------------------------------------------------------
 
