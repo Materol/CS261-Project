@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Login from './Login';
+import Register from './Register';
+import Dashboard from './Dashboard';
+import NavBar from './NavBar/NavBar';
+import Logout from './Logout';
 
 function App() {
+  // store state in local storage to prevent loss after mounting (refresh/redirect)
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    JSON.parse(localStorage.getItem('isLoggedIn')) || false
+  );
+  // when mounting, check if user is logged in in local storage and update state
+  useEffect(() => {
+    localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+  }, [isLoggedIn]);
+  // render
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Router>
+        <NavBar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        <Routes>
+          <Route path='/' element={<h1>Home</h1>} />
+          <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />} exact />
+          <Route path='/register' element={<Register setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}  exact />
+          <Route path='/dashboard' element={<Dashboard isLoggedIn={isLoggedIn}/>} exact />
+          <Route path='/logout' element={<Logout setIsLoggedIn={setIsLoggedIn} />} exact />
+        </Routes>
+      </Router>
     </div>
   );
 }
