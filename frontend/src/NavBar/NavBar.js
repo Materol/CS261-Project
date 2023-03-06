@@ -9,7 +9,6 @@ export default function NavBar(props){
     return(
         <>
             { (props.isLoggedIn) ? <AuthNavBar /> : <NAuthNavBar />}
-            <Button onClick={() => props.setIsLoggedIn(!props.isLoggedIn)}>Change Login</Button>
         </>
     )
 }
