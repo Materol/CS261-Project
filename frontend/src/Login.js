@@ -25,9 +25,17 @@ export default function Login(props) {
         setError('');
         setLoading(true);
 
-        // insert axios call to login in django backend, if successful, navigate to dashboard otherwise show error
-        // also, change the state of isLoggedIn to true
+        try {
+            setError('');
+            setLoading(true);
 
+            // insert axios call to login in django backend, if successful, navigate to dashboard otherwise show error
+            // also, change the state of isLoggedIn to true
+            
+            props.setIsLoggedIn(true);
+        } catch {
+            setError('Password and Email did not match');
+        }
         setLoading(false);
     }
     return (
