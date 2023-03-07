@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 export default function NavBar(props){
     return(
         <>
-            { (props.isLoggedIn) ? <AuthNavBar /> : <NAuthNavBar />}
+            { (props.isLoggedIn) ? <AuthNavBar {...props} /> : <NAuthNavBar />}
         </>
     )
 }

@@ -13,6 +13,7 @@ export default function Logout(props) {
 
             localStorage.clear('access_token');
             localStorage.clear('refresh_token');
+            localStorage.clear('user');
             props.setIsLoggedIn(false);
         }
         props.setIsLoggedIn(false);
