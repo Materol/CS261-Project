@@ -17,7 +17,6 @@ from predictions.critical_success_factors import ALL_CSFS
 from predictions.success_metrics import ALL_SUCCESS_METRICS
 from predictions.utils import create_csf_map, create_prediction_map, extract_csf_values, extract_success_values
 
-
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data.csv')
 
 
@@ -123,6 +122,7 @@ def split_dataset(dataset, ratio, shuffle=True, seed=42):
 
     return [train_data, train_labels], [test_data, test_labels]
 
+
 def to_numpy(dataset) -> List[np.ndarray]:
     """Converts the dataset to two numpy arrays."""
     csfs = []
@@ -135,6 +135,7 @@ def to_numpy(dataset) -> List[np.ndarray]:
     success_metrics = np.array(success_metrics)
 
     return csfs, success_metrics
+
 
 def replace_zeros(values: np.ndarray):
     """Replace zeros in with the median of the column.

@@ -8,7 +8,7 @@ from predictions.success_metrics import OVERALL
 from predictions.utils import create_csf_map, create_prediction_map
 
 
-class TestPredictionModel(unittest.TestCase):
+class TestModelNaive(unittest.TestCase):
     """Tests for generic models and CSF."""
 
     def test_min(self):
