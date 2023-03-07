@@ -213,6 +213,49 @@ $$;
 
 
 
+CREATE OR REPLACE FUNCTION new_reports_to (
+    reporteeID INTEGER,
+    managerID INTEGER
+)
+    RETURNS INTEGER
+    LANGUAGE plpgsql
+AS $$
+DECLARE
+    r_id INTEGER;
+    m_id INTEGER;
+BEGIN
+     -- check if reporteeID exists
+    SELECT id FROM people WHERE reporteeID = id INTO r_id;
+    -- raise exception if no id is found
+    IF r_id IS NULL THEN
+        RAISE EXCEPTION 'reportee_id % does not exist.', projectID;
+    END IF;
+
+     -- check if managerID exists
+    SELECT id FROM people WHERE managerID = id INTO m_id;
+    -- raise exception if no id is found
+    IF m_id IS NULL THEN
+        RAISE EXCEPTION 'manager_id % does not exist.', projectID;
+    END IF;
+
+    WITH insert_reports_to AS (
+        INSERT INTO reports_to(reportee_id, manager_id)
+        VALUES (
+            r_id, m_id
+        )
+        RETURNING reportee_id
+    )
+    SELECT reportee_id INTO r_id FROM insert_reports_to;
+    RETURN r_id;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Rolling back history insertion... %', SQLERRM;
+    RETURN -1;
+END;
+$$;
+
+
 -- Every project is unique
 CREATE TABLE project (
     id SERIAL PRIMARY KEY NOT NULL,
@@ -310,3 +353,10 @@ EXECUTE PROCEDURE valid_report_manage();
 CREATE TRIGGER check_equal_manage AFTER INSERT OR UPDATE ON reports_to
 FOR EACH ROW
 EXECUTE PROCEDURE not_same_manage();
+
+
+ALTER SEQUENCE project_id_seq RESTART WITH 10001;
+ALTER SEQUENCE project_role_id_seq RESTART WITH 10001;
+ALTER SEQUENCE job_title_id_seq RESTART WITH 10001;
+ALTER SEQUENCE people_id_seq RESTART WITH 10001;
+ALTER SEQUENCE project_history_id_seq RESTART WITH 10001;
