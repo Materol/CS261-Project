@@ -30,25 +30,19 @@ class BudgetField(serializers.Field):
 #This is where the attirbutes from the Database schema should be placed
 class ProjectSerializerDashboard(serializers.ModelSerializer):
     
-    riskiness = BudgetField()
-    
     class Meta:
         model = Project
-        fields = ('id', 'title', 'slug', 'Description', 'Budget', 'riskiness', 'StartingDate', 'Deadline', 'Member_size', 'Completed')
+        fields = ('id', 'name', 'Description', 'currenMetric', 'metricHistory', 'members')
           
               
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
-        instance.title = validated_data.get('title', instance.title)
-        instance.slug = validated_data.get('slug', instance.slug)
+        instance.name = validated_data.get('name', instance.name)
         instance.Description = validated_data.get('Description', instance.Description)
-        instance.riskiness = validated_data.get('riskiness', instance.riskiness)
-        instance.Budget = validated_data.get('Budget', instance.Budget)
-        instance.StartingDate = validated_data.get('StartingDate', instance.StartingDate)
-        instance.Deadline = validated_data.get('Deadline', instance.Deadline)
-        instance.Member_size = validated_data.get('Member_size', instance.Member_size)
-        instance.Completed = validated_data.get('Completed', instance.Completed)
+        instance.currenMetric = validated_data.get('currenMetric', instance.currenMetric)
+        instance.metricHistory = validated_data.get('metricHistory', instance.metricHistory)
+        instance.members = validated_data.get('members', instance.members)
         instance.save()
         return instance
