@@ -46,3 +46,22 @@ class ProjectSerializerDashboard(serializers.ModelSerializer):
         instance.members = validated_data.get('members', instance.members)
         instance.save()
         return instance
+    
+    
+class CreateProjectSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Project
+        fields = ('id', 'name', 'Description', 'CSF', 'members')
+          
+              
+    def create(self, validated_data):
+        return Project.objects.create(**validated_data)
+    
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.Description = validated_data.get('Description', instance.Description)
+        instance.CSF = validated_data.get('CSF', instance.CSF)
+        instance.members = validated_data.get('members', instance.members)
+        instance.save()
+        return instance
