@@ -8,17 +8,19 @@ from django.conf import settings
 class Project(models.Model):
 
     #Model fields
-    name = models.TextField()
-    Description = models.TextField()
-    currenMetric = models.JSONField()
-    metricHistory = models.JSONField()
-    members = models.JSONField()
+    name = models.TextField(default='')
+    Description = models.TextField(default='')
+    currentMetric = models.JSONField(default='')
+    metricHistory = models.JSONField(default='')
+    members = models.JSONField(default='')
 
     #Django object manager
     objects = models.Manager()
 
     def __str__(self):
         return self.name
+    
+
 
 
 
