@@ -11,7 +11,7 @@ from predictions.data_processing.dataset import load_dataset, split_dataset, to_
 class Trainer:
     """Train a model on the provided dataset."""
 
-    def __init__(self, seed=42):
+    def __init__(self):
         """Initialize the trainer by loading the dataset."""
         self.dataset = load_dataset()
         csfs, success_metrics = to_numpy(self.dataset)
@@ -20,7 +20,7 @@ class Trainer:
         self.dataset = [csfs, success_metrics]
 
         # Split the dataset into train and test.
-        train, test = split_dataset(self.dataset, 0.7, seed=seed)
+        train, test = split_dataset(self.dataset, 0.7)
         self.train_x, self.train_y = train
         self.test_x, self.test_y = test
 
