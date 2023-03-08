@@ -6,6 +6,27 @@ from predictions.model_knn import ModelKNN
 from predictions.utils import create_csf_map, create_prediction_map
 from predictions.trainer import Trainer
 
+expected_msg = (
+    """We cannot find an improvement for Success Metric 'budget' right now.
+Success Metric 'schedule' is doing poorly. We recommend you allocate fewer resources to 'Top-level management support'. This will improve the 'schedule' score by 2.00 points.
+We cannot find an improvement for Success Metric 'scope' right now.
+We cannot find an improvement for Success Metric 'team_building_and_dynamics' right now.
+We cannot find an improvement for Success Metric 'overall_quality' right now.
+We cannot find an improvement for Success Metric 'business_and_revenue_generated' right now.
+We cannot find an improvement for Success Metric 'functional_suitability' right now.
+We cannot find an improvement for Success Metric 'reliability' right now.
+Success Metric 'performance_efficiency' is doing poorly and we recommend you allocate more resources to 'Top-level management support'. This will improve the 'performance_efficiency' score by 1.00 points.
+We cannot find an improvement for Success Metric 'operability' right now.
+Success Metric 'security' is doing poorly and we recommend you allocate more resources to 'Top-level management support'. This will improve the 'security' score by 1.00 points.
+We cannot find an improvement for Success Metric 'compatibility' right now.
+Success Metric 'maintainability' is doing poorly and we recommend you allocate more resources to 'Organizational culture and management style'. This will improve the 'maintainability' score by 1.00 points.
+Success Metric 'transferability' is doing poorly. We recommend you allocate fewer resources to 'Software development methodologies'. This will improve the 'transferability' score by 1.00 points.
+We cannot find an improvement for Success Metric 'user_satisfaction' right now.
+We cannot find an improvement for Success Metric 'team_satisfaction' right now.
+We cannot find an improvement for Success Metric 'top_management_satisfaction' right now.
+Success Metric 'overall_success' is doing poorly and we recommend you allocate more resources to 'Customer skill, training and education in IT'. This will improve the 'overall_success' score by 0.18 points.
+""")
+
 
 class TestModelKNN(unittest.TestCase):
     """Testing for the KNN model."""
@@ -46,6 +67,21 @@ class TestModelKNN(unittest.TestCase):
 
         # Test that the prediction has the correct success metrics as keys.
         self.assertEqual(result.keys(), create_prediction_map().keys())
+
+    def test_feedback(self):
+        """Test the feedback of the model."""
+        model = ModelKNN()
+        self.trainer.train_model(model)
+
+        csfs, _ = self.trainer.dataset
+
+        # Project 41 gives a good example of feedback.
+        inputs_csfs = create_csf_map(list(csfs[41]))
+
+        feedback = model.give_feedback(inputs_csfs)
+
+        self.assertEqual(feedback.get_feedback(), expected_msg)
+
 
 if __name__ == '__main__':
     unittest.main()

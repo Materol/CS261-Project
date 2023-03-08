@@ -24,7 +24,6 @@ class Trainer:
         self.train_x, self.train_y = train
         self.test_x, self.test_y = test
 
-
     def train_model(
         self,
         model: Model,
