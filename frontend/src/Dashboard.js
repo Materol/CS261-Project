@@ -1,8 +1,8 @@
 // create dashbaord component
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 // dashboard component
 export default function Dashboard(props) {
     // state variables

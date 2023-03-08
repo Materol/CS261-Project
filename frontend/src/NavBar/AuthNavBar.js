@@ -1,5 +1,5 @@
-import { Navbar, Nav, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 import '../style/NavBar.css';
 // navbar component
 export default function AuthNavBar() {

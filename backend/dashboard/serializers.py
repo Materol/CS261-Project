@@ -5,13 +5,13 @@ from users.models import NewUser
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    projects = serializers.PrimaryKeyRelatedField(many=True, queryset=Project.objects.all())
+    projects = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Project.objects.all())
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
         model = NewUser
         fields = ('id', 'user_name', 'projects', 'owner')
-
 
 
 class BudgetField(serializers.Field):
@@ -29,26 +29,31 @@ class BudgetField(serializers.Field):
 
 #This is where the attirbutes from the Database schema should be placed
 class ProjectSerializerDashboard(serializers.ModelSerializer):
-    
+
     riskiness = BudgetField()
-    
+
     class Meta:
         model = Project
-        fields = ('id', 'title', 'slug', 'Description', 'Budget', 'riskiness', 'StartingDate', 'Deadline', 'Member_size', 'Completed')
-          
-              
+        fields = ('id', 'title', 'slug', 'Description', 'Budget', 'riskiness',
+                  'StartingDate', 'Deadline', 'Member_size', 'Completed')
+
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
-    
+
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
         instance.slug = validated_data.get('slug', instance.slug)
-        instance.Description = validated_data.get('Description', instance.Description)
-        instance.riskiness = validated_data.get('riskiness', instance.riskiness)
+        instance.Description = validated_data.get('Description',
+                                                  instance.Description)
+        instance.riskiness = validated_data.get('riskiness',
+                                                instance.riskiness)
         instance.Budget = validated_data.get('Budget', instance.Budget)
-        instance.StartingDate = validated_data.get('StartingDate', instance.StartingDate)
+        instance.StartingDate = validated_data.get('StartingDate',
+                                                   instance.StartingDate)
         instance.Deadline = validated_data.get('Deadline', instance.Deadline)
-        instance.Member_size = validated_data.get('Member_size', instance.Member_size)
-        instance.Completed = validated_data.get('Completed', instance.Completed)
+        instance.Member_size = validated_data.get('Member_size',
+                                                  instance.Member_size)
+        instance.Completed = validated_data.get('Completed',
+                                                instance.Completed)
         instance.save()
         return instance

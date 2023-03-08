@@ -1,11 +1,11 @@
 // necessary imports
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style/Register.css'
+import './style/Register.css';
 // import { useAuth } from './AuthContext';
-import { Link } from 'react-router-dom';
-import { Form, Button, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Alert, Button, Card, Form } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 //import axios to use backend data
 import axiosInstance from './axiosApi';
@@ -34,20 +34,20 @@ export default function Register(props) {
     //Creates user and logs them in
 	const handleSubmit = (e) => {
 		e.preventDefault();
-        
+
 
         // password check
         if (password !== passwordConfirm) {
             return setError('Passwords do not match');
         }
-        
+
 		axiosInstance
 			.post(`user/create/`, {
 				email: email,
                 user_name: username,
 				password: password,
 			})
-            //NEED TO: Change navigation to project page
+            // TODO: Change navigation to project page
 			.then((res) => {
 				navigate('/dashboard');
 			});
@@ -87,4 +87,4 @@ export default function Register(props) {
         </div>
         </>
     );
-    }
+}

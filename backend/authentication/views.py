@@ -12,6 +12,7 @@ class ProjectList(generics.ListAPIView):
     #CHANGE THIS: to query only the users' projects
     queryset = Project.objects.all()
 
+
 #This is the view of a single project
 class ProjectDetail(generics.RetrieveAPIView):
     #Must be authenticated
@@ -24,25 +25,26 @@ class ProjectDetail(generics.RetrieveAPIView):
         return get_object_or_404(Project, slug=item)
 
 
-
 #CRUD operations for admin, will remain the same but be applied for all users
 class CreateProject(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
+
 class AdminProjectDetail(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
 
 class EditProject(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
 
+
 class DeleteProject(generics.RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
-    

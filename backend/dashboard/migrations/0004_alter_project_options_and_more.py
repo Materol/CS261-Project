@@ -7,20 +7,29 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("dashboard", "0003_project_remove_post_author_remove_post_category_and_more"),
+        ("dashboard",
+         "0003_project_remove_post_author_remove_post_category_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name="project", options={"ordering": ("-StartingDate",)},
+            name="project",
+            options={"ordering": ("-StartingDate", )},
         ),
         migrations.RenameField(
-            model_name="project", old_name="content", new_name="Description",
+            model_name="project",
+            old_name="content",
+            new_name="Description",
         ),
         migrations.RenameField(
-            model_name="project", old_name="title", new_name="Name",
+            model_name="project",
+            old_name="title",
+            new_name="Name",
         ),
-        migrations.RemoveField(model_name="project", name="created",),
+        migrations.RemoveField(
+            model_name="project",
+            name="created",
+        ),
         migrations.AddField(
             model_name="project",
             name="Budget",

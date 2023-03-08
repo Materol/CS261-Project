@@ -1,6 +1,6 @@
 // logout component
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Logout(props) {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function Logout(props) {
     }, []);
 
     return (
-        <div>   
+        <div>
             <h1>Logging Out...</h1>
         </div>
     );

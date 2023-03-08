@@ -17,15 +17,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Project',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id',
+                 models.BigAutoField(auto_created=True,
+                                     primary_key=True,
+                                     serialize=False,
+                                     verbose_name='ID')),
                 ('title', models.CharField(max_length=250)),
                 ('content', models.TextField()),
-                ('slug', models.SlugField(max_length=250, unique_for_date='created')),
-                ('created', models.DateTimeField(default=django.utils.timezone.now)),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='creator_projects', to=settings.AUTH_USER_MODEL)),
+                ('slug',
+                 models.SlugField(max_length=250, unique_for_date='created')),
+                ('created',
+                 models.DateTimeField(default=django.utils.timezone.now)),
+                ('creator',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   related_name='creator_projects',
+                                   to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'ordering': ('-created',),
+                'ordering': ('-created', ),
             },
         ),
         migrations.RemoveField(
@@ -36,10 +45,6 @@ class Migration(migrations.Migration):
             model_name='post',
             name='category',
         ),
-        migrations.DeleteModel(
-            name='Category',
-        ),
-        migrations.DeleteModel(
-            name='Post',
-        ),
+        migrations.DeleteModel(name='Category', ),
+        migrations.DeleteModel(name='Post', ),
     ]

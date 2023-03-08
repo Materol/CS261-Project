@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import '../style/NavBar.css';
 import AuthNavBar from './AuthNavBar';
 import NAuthNavBar from './NAuthNavBar';
-import '../style/NavBar.css'
-import {Button} from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function NavBar(props){
     return(

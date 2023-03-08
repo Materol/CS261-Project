@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './style/Login.css'
-import { Link } from 'react-router-dom';
-import { Form, Button, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, Card, Form } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import './style/Login.css';
 
 
 //import axios to use backend data
@@ -26,29 +25,29 @@ export default function Login(props) {
     }, [navigate]);
 
 
-    	//On submit it gives the tokens to the user for auth purposes
-	const handleSubmit = (e) => {
-		e.preventDefault();
+        //On submit it gives the tokens to the user for auth purposes
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
 
-        	// TODO: Add set loading / set error / set logged in?
+        // TODO: Add set loading / set error / set logged in?
 
 
-		axiosInstance
-			.post(`token/`, {
-				email: email,
-				password: password,
-			})
-            	//Storing tokens locally for auth
-			.then((res) => {
-				localStorage.setItem('access_token', res.data.access);
-				localStorage.setItem('refresh_token', res.data.refresh);
+        axiosInstance
+            .post(`token/`, {
+                email: email,
+                password: password,
+            })
+                //Storing tokens locally for auth
+            .then((res) => {
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
                 //Send across access token for auth
-				axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
+                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
                 //If good, navigate to dashboard
-				navigate('/dashboard');
-			});
-	};
+                navigate('/dashboard');
+            });
+    };
 
 
 
@@ -82,5 +81,4 @@ export default function Login(props) {
         </div>
         </>
     );
-    }
-
+}

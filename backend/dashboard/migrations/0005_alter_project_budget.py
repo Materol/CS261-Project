@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name="project", name="Budget", field=models.IntegerField(default=10),
+            model_name="project",
+            name="Budget",
+            field=models.IntegerField(default=10),
         ),
     ]
