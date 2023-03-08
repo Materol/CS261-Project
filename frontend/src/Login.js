@@ -31,7 +31,7 @@ export default function Login(props) {
 		e.preventDefault();
 
 
-        //NEED TO: Add set loading / set error / set logged in?
+        // TODO: Add set loading / set error / set logged in?
 
 
 		axiosInstance
