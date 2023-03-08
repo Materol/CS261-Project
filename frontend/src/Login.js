@@ -26,12 +26,12 @@ export default function Login(props) {
     }, [navigate]);
 
 
-    //On submit it gives the tokens to the user for auth purposes
+    	//On submit it gives the tokens to the user for auth purposes
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 
-        // TODO: Add set loading / set error / set logged in?
+        	// TODO: Add set loading / set error / set logged in?
 
 
 		axiosInstance
@@ -39,7 +39,7 @@ export default function Login(props) {
 				email: email,
 				password: password,
 			})
-            //Storing tokens locally for auth
+            	//Storing tokens locally for auth
 			.then((res) => {
 				localStorage.setItem('access_token', res.data.access);
 				localStorage.setItem('refresh_token', res.data.refresh);
