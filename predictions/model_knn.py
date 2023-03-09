@@ -9,7 +9,7 @@ from predictions.critical_success_factors import CSF, ALL_CSFS
 from predictions.feedback import Feedback
 from predictions.metrics.analyse import Analyser
 from predictions.success_metrics import ALL_SUCCESS_METRICS, SuccessMetric, OVERALL
-from predictions.utils import extract_csf_values, create_prediction_map
+from predictions.utils import extract_csf_values, create_prediction_map, to_json_feedback
 from sklearn.neighbors import KNeighborsClassifier
 
 
@@ -176,14 +176,20 @@ class ModelKNN(Model):
             with_metadata = (pm, csf, pred)
             search_space_predictions.append(with_metadata)
 
+        # Create a map of success metrics to feedback.
+        sm_feedback = create_prediction_map()
+        for sm, _ in prediction.items():
+            sm_feedback[sm] = ""
+
         # Find the best CSF allocation for each success metric and construct
         # feedback message.
-        feedback_msg = ""
         for sm, value in prediction.items():
+            feedback_msg = ""
             if value >= 5:
                 feedback_msg += (
                     f"Success Metric '{sm.name}' is doing well. We recommend "
-                    f"you continue with your current strategy.\n")
+                    f"you continue with your current strategy.")
+                sm_feedback[sm] = feedback_msg
                 continue
 
             # Search new predictions for the best CSF allocation.
@@ -201,7 +207,8 @@ class ModelKNN(Model):
             if best_allocation is None:
                 feedback_msg += (
                     f"We cannot find an improvement for Success Metric "
-                    f"'{sm.name}' right now.\n")
+                    f"'{sm.name}' right now.")
+                sm_feedback[sm] = feedback_msg
                 continue
 
             improvement = float(best_value - prediction[sm])
@@ -220,7 +227,9 @@ class ModelKNN(Model):
             # Show impovement to 2 decimal places.
             feedback_msg += (
                 f"This will improve the '{sm.name}' score by {improvement:.2f} "
-                f"points.\n")
+                f"points.")
 
-        feedback.set_feedback(feedback_msg)
+            sm_feedback[sm] = feedback_msg
+
+        feedback.set_feedback(to_json_feedback(sm_feedback))
         return feedback

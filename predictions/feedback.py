@@ -21,6 +21,7 @@ class Feedback:
         self.predictions = predictions
 
     def set_feedback(self, feedback: str):
+        """Set the feedback string, which is a JSON mapping SuccessMetrics."""
         self.feedback = feedback
 
     def set_predictions(self, predictions: Dict[SuccessMetric, float]):

@@ -25,5 +25,8 @@ class Model:
         raise NotImplementedError("Model.train() not implemented.")
 
     def give_feedback(self) -> Feedback:
-        """Give feedback on how to improve the output."""
+        """Give feedback on how to improve the output.
+
+        Output should be a JSON string mapping SuccessMetrics to feedback.
+        """
         raise NotImplementedError("Model.give_feedback() not implemented.")

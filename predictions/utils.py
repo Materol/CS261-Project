@@ -41,12 +41,20 @@ def extract_success_values(
     """
     return [success_metrics[sm] for sm in ALL_SUCCESS_METRICS]
 
+
 def to_json_csfs(csfs: Dict[CSF, int]) -> str:
     """Convert a CSF map to a JSON string."""
     csf_name_to_vals = {csf.name: int(val) for csf, val in csfs.items()}
     return json.dumps(csf_name_to_vals, indent=4)
 
+
 def to_json_success_metrics(success_metrics: Dict[SuccessMetric, float]) -> str:
     """Convert a SuccessMetrics map to a JSON string."""
     sm_to_vals = {sm.name: float(val) for sm, val in success_metrics.items()}
     return json.dumps(sm_to_vals, indent=4)
+
+
+def to_json_feedback(feedback: Dict[SuccessMetric, float]) -> str:
+    """Convert feedback for each SuccessMetric to a JSON string."""
+    sm_feedback = {sm.name: feedback for sm, feedback in feedback.items()}
+    return json.dumps(sm_feedback, indent=4)

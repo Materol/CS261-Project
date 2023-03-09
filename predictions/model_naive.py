@@ -8,7 +8,7 @@ from predictions.critical_success_factors import CSF, OF4, OF5, OF6, TF1, TF2, P
 from predictions.feedback import Feedback
 from predictions.model import Model
 from predictions.success_metrics import SuccessMetric, OVERALL
-from predictions.utils import create_prediction_map
+from predictions.utils import create_prediction_map, to_json_feedback
 
 
 class ModelNaive(Model):
@@ -60,6 +60,11 @@ class ModelNaive(Model):
 
         prediction = self.predict(csf_values)
 
+        # Create a map of success metrics to feedback.
+        sm_feedback = create_prediction_map()
+        for sm, _ in prediction.items():
+            sm_feedback[sm] = "No feedback available."
+
         text_feedback = ""
         if prediction[OVERALL] >= 5:
             text_feedback += (
@@ -67,22 +72,22 @@ class ModelNaive(Model):
                 "continue with your current strategy.")
         elif max_diff_csf == PF5:
             text_feedback += (
-                f"Your project's {max_diff_csf} is too high. The description "
-                "of this CSF is: {max_diff_csf.description}. Decreasing this "
-                "CSF will have the most impact on your project's success.")
+                f"Your project's {max_diff_csf.name} is too high. The description "
+                f"of this CSF is: {max_diff_csf.description}. Decreasing this "
+                f"CSF will have the most impact on your project's success.")
         else:
             text_feedback += (
-                f"Your project's {max_diff_csf} is too low. The description "
-                "of this CSF is: {max_diff_csf.description}. Increasing this "
-                "CSF will have the most impact on your project's success.")
+                f"Your project's {max_diff_csf.name} is too low. The description "
+                f"of this CSF is: {max_diff_csf.description}. Increasing this "
+                f"CSF will have the most impact on your project's success.")
 
         if prediction[OVERALL] <= 2:
             text_feedback += (
                 "Your project is likely to fail. We recommend you consider "
                 "changing your strategy rapidly.")
-
+        sm_feedback[OVERALL] = text_feedback
         feedback = Feedback(
-            feedback=text_feedback,
+            feedback=to_json_feedback(sm_feedback),
             predictions=prediction,
         )
         return feedback
