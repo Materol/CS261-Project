@@ -1,6 +1,6 @@
 // logout component
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 //import axios to use backend data
@@ -24,9 +24,9 @@ export default function Logout(props) {
             localStorage.clear('access_token');
             localStorage.clear('refresh_token');
             localStorage.clear('user');
-            
+
             axiosInstance.defaults.headers['Authorization'] = null;
-            
+
             props.setIsLoggedIn(false);
         }
         props.setIsLoggedIn(false);
@@ -34,7 +34,7 @@ export default function Logout(props) {
     }, []);
 
     return (
-        <div>   
+        <div>
             <h1>Logging Out...</h1>
         </div>
     );

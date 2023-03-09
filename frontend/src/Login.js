@@ -41,26 +41,26 @@ export default function Login(props) {
             // also, change the state of isLoggedIn to true
 
             axiosInstance
-			.post(`token/`, {
-				email: email,
-				password: password,
-			})
+            .post(`token/`, {
+                email: email,
+                password: password,
+            })
             //Storing tokens locally for auth
-			.then((res) => {
-				localStorage.setItem('access_token', res.data.access);
-				localStorage.setItem('refresh_token', res.data.refresh);
+            .then((res) => {
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
                 //Send across access token for auth
-				axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
+                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
                 //If good, navigate to dashboard
-				//navigate('/dashboard');
-			});
+                //navigate('/dashboard');
+            });
 
-            
+
             props.setIsLoggedIn(true);
             props.setUser(email);
 
             //If good, navigate to dashboard
-			navigate('/dashboard');
+            navigate('/dashboard');
 
         } catch {
             setError('Password and Email did not match');
@@ -69,37 +69,28 @@ export default function Login(props) {
     } */
 
     //On submit it gives the tokens to the user for auth purposes
-	const handleSubmit = (e) => {
-		e.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
+        // TODO: Add set loading / set error / set logged in?
 
-        //NEED TO: Add set loading / set error / set logged in?
-
-
-		axiosInstance
-			.post(`token/`, {
-				email: email,
-				password: password,
-			})
+        axiosInstance
+            .post(`token/`, {
+                email: email,
+                password: password,
+            })
             //Storing tokens locally for auth
-			.then((res) => {
-				localStorage.setItem('access_token', res.data.access);
-				localStorage.setItem('refresh_token', res.data.refresh);
+            .then((res) => {
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
                 //Send across access token for auth
-				axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
+                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
                 //If good, navigate to dashboard
                 props.setUser(username)
                 props.setIsLoggedIn(true);
-				navigate('/dashboard');
-			});
-	};
-
-
-
-
-
-
-
+                navigate('/dashboard');
+            });
+    };
 
     return (
         <>
@@ -137,4 +128,3 @@ export default function Login(props) {
         </>
     );
     }
-
