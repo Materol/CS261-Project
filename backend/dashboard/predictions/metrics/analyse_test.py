@@ -2,7 +2,7 @@
 
 import unittest
 
-from predictions.metrics.analyse import Analyser
+from ..metrics.analyse import Analyser
 
 
 class TestAnalyser(unittest.TestCase):

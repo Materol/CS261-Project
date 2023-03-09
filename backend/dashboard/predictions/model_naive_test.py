@@ -3,11 +3,11 @@
 import json
 import unittest
 
-from predictions.critical_success_factors import OF1, OF4, OF5, OF6, TF1, TF2, PF5
-from predictions.feedback import Feedback
-from predictions.model_naive import ModelNaive
-from predictions.success_metrics import OVERALL
-from predictions.utils import create_csf_map, create_prediction_map
+from .critical_success_factors import OF1, OF4, OF5, OF6, TF1, TF2, PF5
+from .feedback import Feedback
+from .model_naive import ModelNaive
+from .success_metrics import OVERALL
+from .utils import create_csf_map, create_prediction_map
 
 
 class TestModelNaive(unittest.TestCase):

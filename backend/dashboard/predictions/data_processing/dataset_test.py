@@ -2,10 +2,10 @@
 
 import unittest
 
-from predictions.data_processing.dataset import load_dataset
-from predictions.critical_success_factors import ALL_CSFS
-from predictions.success_metrics import ALL_SUCCESS_METRICS
-from predictions.utils import extract_csf_values, extract_success_values
+from ..data_processing.dataset import load_dataset
+from ..critical_success_factors import ALL_CSFS
+from ..success_metrics import ALL_SUCCESS_METRICS
+from ..utils import extract_csf_values, extract_success_values
 
 
 class TestDataset(unittest.TestCase):

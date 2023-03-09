@@ -3,9 +3,9 @@
 import json
 import unittest
 
-from predictions.model_knn import ModelKNN
-from predictions.utils import create_csf_map, create_prediction_map
-from predictions.trainer import Trainer
+from .model_knn import ModelKNN
+from .utils import create_csf_map, create_prediction_map
+from .trainer import Trainer
 
 expected_msg = ("""{
     "budget": "We cannot find an improvement for Success Metric 'budget' right now.",
@@ -87,7 +87,6 @@ class TestModelKNN(unittest.TestCase):
 
         for key in feedback_dicts:
             self.assertEqual(feedback_dicts[key], expected_dicts[key])
-        # self.assertEqual(feedback.get_feedback(), expected_msg)
 
 
 if __name__ == '__main__':

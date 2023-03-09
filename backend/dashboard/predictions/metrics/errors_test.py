@@ -2,8 +2,7 @@
 
 import unittest
 
-from predictions.metrics.errors import Errors
-from predictions.utils import create_prediction_map
+from ..metrics.errors import Errors
 
 
 class TestErrors(unittest.TestCase):

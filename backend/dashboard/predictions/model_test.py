@@ -2,8 +2,8 @@
 
 import unittest
 
-from predictions.critical_success_factors import CSF, ALL_CSFS
-from predictions.success_metrics import SuccessMetric, ALL_SUCCESS_METRICS
+from .critical_success_factors import CSF, ALL_CSFS
+from .success_metrics import SuccessMetric, ALL_SUCCESS_METRICS
 
 
 class TestModel(unittest.TestCase):
