@@ -1,5 +1,6 @@
 """Testing for the generic model."""
 
+import json
 import unittest
 
 from predictions.critical_success_factors import OF1, OF4, OF5, OF6, TF1, TF2, PF5
@@ -88,6 +89,7 @@ class TestModelNaive(unittest.TestCase):
         data[TF2] = 5
         data[PF5] = 1
         actual_feedback = model.give_feedback(data)
+        actual_msg = actual_feedback.get_feedback()
 
         expected_prediction = create_prediction_map()
         expected_prediction[OVERALL] = 5.0
@@ -100,8 +102,9 @@ class TestModelNaive(unittest.TestCase):
             predictions=expected_prediction,
         )
 
-        self.assertEqual(actual_feedback.get_feedback(),
-                         expected_feedback.get_feedback())
+        overall_feedback = json.loads(actual_msg)['overall_success']
+
+        self.assertEqual(overall_feedback, expected_feedback.get_feedback())
         self.assertEqual(actual_feedback.get_predictions(),
                          expected_feedback.get_predictions())
 
