@@ -22,11 +22,11 @@ knn = ModelKNN()
 trainer.train_model(knn)
 
 # Create your views here.
-     
+
+
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializerDashboard
     queryset = Project.objects.all()
-
 
     # def get_queryset(self):
     #     user = self.request.user
@@ -34,7 +34,7 @@ class ProjectList(generics.ListCreateAPIView):
     # def perform_create(self, serializer):
     #     user = self.request.user
     #     serializer.save(creator=user)
- 
+
 
 #Create a project, calculate metrics using KNN model and store in database
 class CreateProject(generics.CreateAPIView):
@@ -53,21 +53,23 @@ class CreateProject(generics.CreateAPIView):
             json_knn_prediction = to_json_success_metrics(knn_prediction)
             currentMetric = json.loads(json_knn_prediction)
             testFeedback = json.loads(knn.give_feedback(CSFs).get_feedback())
-        
+
         if metricHistory is None:
             metricHistory = currentMetric
-        
+
         if feedback is None:
             feedback = testFeedback
-        
-        serializer.save(currentMetric=currentMetric, metricHistory=metricHistory, feedback=feedback)
+
+        serializer.save(currentMetric=currentMetric,
+                        metricHistory=metricHistory,
+                        feedback=feedback)
 
 
-    
 class ProjectDetail(generics.RetrieveAPIView):
     serializer_class = ProjectSerializerDashboard
     queryset = Project.objects.all()
-    
+
+
 class DeleteProject(generics.DestroyAPIView):
     serializer_class = ProjectSerializerDashboard
     queryset = Project.objects.all()

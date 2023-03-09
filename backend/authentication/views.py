@@ -11,6 +11,7 @@ class ProjectList(generics.ListAPIView):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
 
+
 #This is the view of a single project for the admin
 class ProjectDetail(generics.RetrieveAPIView):
     #Must be authenticated
@@ -24,18 +25,20 @@ class CreateProject(generics.CreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
+
 class AdminProjectDetail(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
 
 class EditProject(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
 
+
 class DeleteProject(generics.RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
-    

@@ -1,4 +1,3 @@
-
 from .views import ProjectList, ProjectDetail, CreateProject, EditProject, AdminProjectDetail, DeleteProject
 from django.urls import path
 
@@ -11,7 +10,11 @@ urlpatterns = [
     path('project/<str:pk>/', ProjectDetail.as_view(), name='detailproject'),
     #CRUD for admin
     path('admin/edit/<int:pk>/', EditProject.as_view(), name='editproject'),
-    path('admin/delete/<int:pk>/', DeleteProject.as_view(), name='deleteproject'),
+    path('admin/delete/<int:pk>/',
+         DeleteProject.as_view(),
+         name='deleteproject'),
     path('admin/create/', CreateProject.as_view(), name='createproject'),
-    path('admin/edit/projectdetail/<int:pk>/', AdminProjectDetail.as_view(), name='admindetailproject'),
+    path('admin/edit/projectdetail/<int:pk>/',
+         AdminProjectDetail.as_view(),
+         name='admindetailproject'),
 ]
