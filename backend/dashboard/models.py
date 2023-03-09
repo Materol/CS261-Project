@@ -1,18 +1,16 @@
 from django.db import models
-from django.utils import timezone
-from django.conf import settings
-
-
 
 #The main model for a project
 class Project(models.Model):
 
     #Model fields
     name = models.TextField(default='')
-    Description = models.TextField(default='')
-    currentMetric = models.JSONField(default='')
-    metricHistory = models.JSONField(default='')
-    members = models.JSONField(default='')
+    description = models.TextField(default='')
+    CSFs = models.JSONField(default=dict)
+    currentMetric = models.JSONField(default=dict)
+    metricHistory = models.JSONField(default=dict)
+    feedback = models.JSONField(default=dict)
+    members = models.JSONField(default=dict)
 
     #Django object manager
     objects = models.Manager()

@@ -6,6 +6,8 @@ from dashboard import views
 
 app_name = 'dashboard'
 
+
+#Paths for projects
 urlpatterns = [
     path('projects/detail/<str:pk>/', views.ProjectDetail.as_view(), name='detail_project'),
     path('projects/delete/<str:pk>/', views.DeleteProject.as_view(), name='delete_project'),

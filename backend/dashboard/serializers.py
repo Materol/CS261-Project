@@ -13,26 +13,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'user_name', 'projects', 'owner')
 
 
-
-class BudgetField(serializers.Field):
-
-    def to_representation(self, value):
-        # You can decide here how you want to return your data back
-        return value
-
-    def to_internal_value(self, data):
-        # this will be passed to validated_data, so will be used to create/update instances
-        # you could do some validation here to make sure it is a float
-        # https://www.django-rest-framework.org/api-guide/fields/#raising-validation-errors
-        return int(int(data) / 100)
-
-
-#This is where the attirbutes from the Database schema should be placed
+#Serializer for project reading
 class ProjectSerializerDashboard(serializers.ModelSerializer):
     
     class Meta:
         model = Project
-        fields = ('id', 'name', 'Description', 'currentMetric', 'metricHistory', 'members')
+        fields = ('id', 'name', 'description', 'CSFs', 'currentMetric', 'metricHistory','feedback', 'members')
           
               
     def create(self, validated_data):
@@ -40,29 +26,33 @@ class ProjectSerializerDashboard(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.Description = validated_data.get('Description', instance.Description)
+        instance.Description = validated_data.get('description', instance.description)
+        instance.CSFs = validated_data.get('CSFs', instance.CSFs)
         instance.currentMetric = validated_data.get('currentMetric', instance.currentMetric)
         instance.metricHistory = validated_data.get('metricHistory', instance.metricHistory)
+        instance.feedback = validated_data.get('feedback', instance.feedback)
         instance.members = validated_data.get('members', instance.members)
         instance.save()
         return instance
     
-    
+#Serializer for project creation  
 class CreateProjectSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Project
-        fields = ('id', 'name', 'Description', 'currentMetric','metricHistory', 'members')
+        fields = ('id', 'name', 'description', 'CSFs', 'currentMetric','metricHistory', 'feedback', 'members')
           
               
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
-    
+        
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.Description = validated_data.get('Description', instance.Description)
+        instance.Description = validated_data.get('description', instance.description)
+        instance.CSFs = validated_data.get('CSFs', instance.CSFs)
         instance.currentMetric = validated_data.get('currentMetric', instance.currentMetric)
         instance.metricHistory = validated_data.get('metricHistory', instance.metricHistory)
+        instance.feedback = validated_data.get('feedback', instance.feedback)
         instance.members = validated_data.get('members', instance.members)
         instance.save()
         return instance
