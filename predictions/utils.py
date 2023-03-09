@@ -1,7 +1,8 @@
 """Extra utilities functions for predictions."""
 
-from typing import Dict, List
+import json
 
+from typing import Dict, List
 from predictions.critical_success_factors import CSF, ALL_CSFS
 from predictions.success_metrics import SuccessMetric, ALL_SUCCESS_METRICS
 
@@ -22,20 +23,30 @@ def create_prediction_map() -> Dict[SuccessMetric, float]:
     return {sm: 0.0 for sm in ALL_SUCCESS_METRICS}
 
 
-def extract_csf_values(csf_or_success_metrics: Dict[CSF, int]) -> List[int]:
+def extract_csf_values(csfs: Dict[CSF, int]) -> List[int]:
     """Extract and order CSFs values.
 
     These values are ordered by their in appearance `ALL_CSFS`.
     Values that do not appear in `ALL_CSFS` are ignored.
     """
-    return [csf_or_success_metrics[csf] for csf in ALL_CSFS]
+    return [csfs[csf] for csf in ALL_CSFS]
 
 
 def extract_success_values(
-        csf_or_success_metrics: Dict[SuccessMetric, float]) -> List[int]:
+        success_metrics: Dict[SuccessMetric, float]) -> List[int]:
     """Extract and order SuccessMetrics values.
 
     These values are ordered by their in appearance `ALL_SUCCESS_METRICS`.
     Values that do not appear in `ALL_SUCCESS_METRICS` are ignored.
     """
-    return [csf_or_success_metrics[sm] for sm in ALL_SUCCESS_METRICS]
+    return [success_metrics[sm] for sm in ALL_SUCCESS_METRICS]
+
+def to_json_csfs(csfs: Dict[CSF, int]) -> str:
+    """Convert a CSF map to a JSON string."""
+    csf_name_to_vals = {csf.name: int(val) for csf, val in csfs.items()}
+    return json.dumps(csf_name_to_vals, indent=4)
+
+def to_json_success_metrics(success_metrics: Dict[SuccessMetric, float]) -> str:
+    """Convert a SuccessMetrics map to a JSON string."""
+    sm_to_vals = {sm.name: float(val) for sm, val in success_metrics.items()}
+    return json.dumps(sm_to_vals, indent=4)
