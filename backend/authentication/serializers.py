@@ -1,3 +1,4 @@
+
 #Serializers will return data in the right format from the database to REACT
 
 from rest_framework import serializers
@@ -5,12 +6,11 @@ from dashboard.models import Project
 from django.conf import settings
 
 
-#This is where the attirbutes from the Database schema should be placed
+#Project fields for admin
 class ProjectSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Project
-        fields = ('id', 'title', 'slug', 'creator', 'Description')
+        fields = ('id', 'name', 'description', 'CSFs', 'currentMetric','metricHistory', 'feedback', 'members')
 
 
 #Simple user model, can be replaced by schema if necessary
