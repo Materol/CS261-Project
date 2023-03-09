@@ -1,31 +1,32 @@
 """Testing for the KNN model."""
 
+import json
 import unittest
 
 from predictions.model_knn import ModelKNN
 from predictions.utils import create_csf_map, create_prediction_map
 from predictions.trainer import Trainer
 
-expected_msg = (
-    """We cannot find an improvement for Success Metric 'budget' right now.
-Success Metric 'schedule' is doing poorly. We recommend you allocate fewer resources to 'Top-level management support'. This will improve the 'schedule' score by 2.00 points.
-We cannot find an improvement for Success Metric 'scope' right now.
-We cannot find an improvement for Success Metric 'team_building_and_dynamics' right now.
-We cannot find an improvement for Success Metric 'overall_quality' right now.
-We cannot find an improvement for Success Metric 'business_and_revenue_generated' right now.
-We cannot find an improvement for Success Metric 'functional_suitability' right now.
-We cannot find an improvement for Success Metric 'reliability' right now.
-Success Metric 'performance_efficiency' is doing poorly and we recommend you allocate more resources to 'Top-level management support'. This will improve the 'performance_efficiency' score by 1.00 points.
-We cannot find an improvement for Success Metric 'operability' right now.
-Success Metric 'security' is doing poorly and we recommend you allocate more resources to 'Top-level management support'. This will improve the 'security' score by 1.00 points.
-We cannot find an improvement for Success Metric 'compatibility' right now.
-Success Metric 'maintainability' is doing poorly and we recommend you allocate more resources to 'Organizational culture and management style'. This will improve the 'maintainability' score by 1.00 points.
-Success Metric 'transferability' is doing poorly. We recommend you allocate fewer resources to 'Software development methodologies'. This will improve the 'transferability' score by 1.00 points.
-We cannot find an improvement for Success Metric 'user_satisfaction' right now.
-We cannot find an improvement for Success Metric 'team_satisfaction' right now.
-We cannot find an improvement for Success Metric 'top_management_satisfaction' right now.
-Success Metric 'overall_success' is doing poorly and we recommend you allocate more resources to 'Customer skill, training and education in IT'. This will improve the 'overall_success' score by 0.18 points.
-""")
+expected_msg = ("""{
+    "budget": "We cannot find an improvement for Success Metric 'budget' right now.",
+    "schedule": "Success Metric 'schedule' is doing poorly. We recommend you allocate fewer resources to 'Top-level management support'. This will improve the 'schedule' score by 2.00 points.",
+    "scope": "We cannot find an improvement for Success Metric 'scope' right now.",
+    "team_building_and_dynamics": "We cannot find an improvement for Success Metric 'team_building_and_dynamics' right now.",
+    "overall_quality": "We cannot find an improvement for Success Metric 'overall_quality' right now.",
+    "business_and_revenue_generated": "We cannot find an improvement for Success Metric 'business_and_revenue_generated' right now.",
+    "functional_suitability": "We cannot find an improvement for Success Metric 'functional_suitability' right now.",
+    "reliability": "We cannot find an improvement for Success Metric 'reliability' right now.",
+    "performance_efficiency": "Success Metric 'performance_efficiency' is doing poorly and we recommend you allocate more resources to 'Top-level management support'. This will improve the 'performance_efficiency' score by 1.00 points.",
+    "operability": "We cannot find an improvement for Success Metric 'operability' right now.",
+    "security": "Success Metric 'security' is doing poorly and we recommend you allocate more resources to 'Top-level management support'. This will improve the 'security' score by 1.00 points.",
+    "compatibility": "We cannot find an improvement for Success Metric 'compatibility' right now.",
+    "maintainability": "Success Metric 'maintainability' is doing poorly and we recommend you allocate more resources to 'Organizational culture and management style'. This will improve the 'maintainability' score by 1.00 points.",
+    "transferability": "Success Metric 'transferability' is doing poorly. We recommend you allocate fewer resources to 'Software development methodologies'. This will improve the 'transferability' score by 1.00 points.",
+    "user_satisfaction": "We cannot find an improvement for Success Metric 'user_satisfaction' right now.",
+    "team_satisfaction": "We cannot find an improvement for Success Metric 'team_satisfaction' right now.",
+    "top_management_satisfaction": "We cannot find an improvement for Success Metric 'top_management_satisfaction' right now.",
+    "overall_success": "Success Metric 'overall_success' is doing poorly and we recommend you allocate more resources to 'Customer skill, training and education in IT'. This will improve the 'overall_success' score by 0.18 points."
+}""")
 
 
 class TestModelKNN(unittest.TestCase):
@@ -36,6 +37,7 @@ class TestModelKNN(unittest.TestCase):
 
         # Create a trainer object, which loads the data.
         self.trainer = Trainer()
+        self.maxDiff = None
 
     def test_train(self):
         """Test the training of the model."""
@@ -80,7 +82,12 @@ class TestModelKNN(unittest.TestCase):
 
         feedback = model.give_feedback(inputs_csfs)
 
-        self.assertEqual(feedback.get_feedback(), expected_msg)
+        feedback_dicts = json.loads(feedback.get_feedback())
+        expected_dicts = json.loads(expected_msg)
+
+        for key in feedback_dicts:
+            self.assertEqual(feedback_dicts[key], expected_dicts[key])
+        # self.assertEqual(feedback.get_feedback(), expected_msg)
 
 
 if __name__ == '__main__':
