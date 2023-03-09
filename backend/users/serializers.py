@@ -2,7 +2,7 @@ from rest_framework import serializers
 from users.models import NewUser
 
 
-#serializer to access database
+#serializer to access database - model from django web
 class CustomUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     user_name = serializers.CharField(required=True)

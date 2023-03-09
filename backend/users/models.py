@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
-#Allow for creating accounts from admin page / terminal (run .../manage.py createsuperuser)
+#Allow for creating accounts from admin page and superuser override
 class CustomAccountManager(BaseUserManager):
 
     def create_superuser(self, email, user_name, first_name, password, **other_fields):
@@ -35,7 +35,7 @@ class CustomAccountManager(BaseUserManager):
         return user
 
 
-#New user model, replace with pav database model if necessary
+#New user model, template from django web
 class NewUser(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_('email address'), unique=True)

@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny
 class CustomUserCreate(APIView):
     permission_classes = [AllowAny]
 
+    #Error checking - django web
     def post(self, request, format='json'):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
@@ -20,7 +21,7 @@ class CustomUserCreate(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#Logout user
+#Logout user and blacklist token 
 class BlacklistTokenUpdateView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = ()
