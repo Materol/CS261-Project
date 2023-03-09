@@ -1,15 +1,15 @@
 // necessary imports
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style/Register.css';
+import './style/Register.css'
 // import { useAuth } from './AuthContext';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Form, Button, Card, Alert } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 //import axios to use backend data
 import axiosInstance from './axiosApi';
-
 
 
 // register function component
@@ -30,28 +30,66 @@ export default function Register(props) {
         }
     }, [navigate]);
 
-
-    //Creates user and logs them in
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-
+    /* async function handleSubmit(e) {
+        e.preventDefault();
         // password check
         if (password !== passwordConfirm) {
             return setError('Passwords do not match');
         }
 
+        try {
+            setError('');
+            setLoading(true);
+
+            // insert axios call to register in django backend, 
+            // if successful, navigate to dashboard otherwise show error
+
+            axiosInstance
+			.post(`user/create/`, {
+				email: email,
+                user_name: username,
+				password: password,
+			})
+            //NEED TO: Change navigation to project page
+			.then((res) => {
+				navigate('/dashboard');
+			});
+
+
+            props.setUser(email);
+            props.setIsLoggedIn(true);
+        } catch {
+            setError('Failed to create an account');
+        }
+        setLoading(false);
+    } */
+
+    //Creates user and logs them in
+	const handleSubmit = (e) => {
+		e.preventDefault();
+        
+
+        // password check
+        if (password !== passwordConfirm) {
+            return setError('Passwords do not match');
+        }
+        
 		axiosInstance
 			.post(`user/create/`, {
 				email: email,
                 user_name: username,
 				password: password,
 			})
-            // TODO: Change navigation to project page
+            //NEED TO: Change navigation to project page
 			.then((res) => {
+                props.setUser(username)
+                props.setIsLoggedIn(true);
 				navigate('/dashboard');
 			});
 	};
+
+
+
 
     return (
         <>
@@ -77,7 +115,7 @@ export default function Register(props) {
                     <Form.Label className='rPasswordConfirmLabel'>Password Confirmation</Form.Label>
                     <Form.Control type="password" required onChange={e => setPasswordConfirm(e.target.value)} />
                     </Form.Group>
-                    <Button disabled={loading} className="w-100" type="submit" onClick={handleSubmit} >Register</Button>
+                    <Button disabled={loading} className="w-100" type="submit">Register</Button>
                 </Form>
                 </Card.Body>
             </Card>
@@ -87,4 +125,4 @@ export default function Register(props) {
         </div>
         </>
     );
-}
+    }

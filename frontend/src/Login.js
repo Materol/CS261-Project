@@ -1,8 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './style/Login.css'
+import { Link } from 'react-router-dom';
+import { Form, Button, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useEffect, useState } from 'react';
-import { Alert, Button, Card, Form } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import './style/Login.css';
 
 
 //import axios to use backend data
@@ -13,6 +14,7 @@ import axiosInstance from './axiosApi';
 export default function Login(props) {
     // state variables
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -25,29 +27,77 @@ export default function Login(props) {
     }, [navigate]);
 
 
-        //On submit it gives the tokens to the user for auth purposes
-    const handleSubmit = (e) => {
+    // handle login request
+    /* async function handleSubmit(e) {
         e.preventDefault();
+        setError('');
+        setLoading(true);
 
+        try {
+            //setError('');
+            //setLoading(true);
 
-        // TODO: Add set loading / set error / set logged in?
+            // insert axios call to login in django backend, if successful, navigate to dashboard otherwise show error
+            // also, change the state of isLoggedIn to true
 
-
-        axiosInstance
-            .post(`token/`, {
-                email: email,
-                password: password,
-            })
-                //Storing tokens locally for auth
-            .then((res) => {
-                localStorage.setItem('access_token', res.data.access);
-                localStorage.setItem('refresh_token', res.data.refresh);
+            axiosInstance
+			.post(`token/`, {
+				email: email,
+				password: password,
+			})
+            //Storing tokens locally for auth
+			.then((res) => {
+				localStorage.setItem('access_token', res.data.access);
+				localStorage.setItem('refresh_token', res.data.refresh);
                 //Send across access token for auth
-                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
+				axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
                 //If good, navigate to dashboard
-                navigate('/dashboard');
-            });
-    };
+				//navigate('/dashboard');
+			});
+
+            
+            props.setIsLoggedIn(true);
+            props.setUser(email);
+
+            //If good, navigate to dashboard
+			navigate('/dashboard');
+
+        } catch {
+            setError('Password and Email did not match');
+        }
+        setLoading(false);
+    } */
+
+    //On submit it gives the tokens to the user for auth purposes
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+
+        //NEED TO: Add set loading / set error / set logged in?
+
+
+		axiosInstance
+			.post(`token/`, {
+				email: email,
+				password: password,
+			})
+            //Storing tokens locally for auth
+			.then((res) => {
+				localStorage.setItem('access_token', res.data.access);
+				localStorage.setItem('refresh_token', res.data.refresh);
+                //Send across access token for auth
+				axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
+                //If good, navigate to dashboard
+                props.setUser(username)
+                props.setIsLoggedIn(true);
+				navigate('/dashboard');
+			});
+	};
+
+
+
+
+
 
 
 
@@ -62,6 +112,10 @@ export default function Login(props) {
                     <Form.Group id="email">
                     <Form.Label className='lEmailLabel'>Email</Form.Label>
                     <Form.Control type="email" required onChange={e => setEmail(e.target.value)} />
+                    </Form.Group>
+                    <Form.Group id="username">
+                    <Form.Label className='rUsernameLabel'>Username</Form.Label>
+                    <Form.Control type="text" required onChange={e => setUsername(e.target.value)} />
                     </Form.Group>
                     <Form.Group id="password">
                     <Form.Label className='lPasswordLabel'>Password</Form.Label>
@@ -78,7 +132,9 @@ export default function Login(props) {
             <div className="w-100 text-center mt-2">
                 Need an account? <Link to="/register">Register</Link>
             </div>
+            <Button onClick={() => {props.setIsLoggedIn(!props.isLoggedIn); navigate('/dashboard');}}>Debug Login</Button>
         </div>
         </>
     );
-}
+    }
+
