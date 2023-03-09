@@ -5,6 +5,7 @@ import Register from './Register';
 import Dashboard from './Dashboard';
 import NavBar from './NavBar/NavBar';
 import Logout from './Logout';
+import ProjectView from './ProjectView';
 
 function App() {
   // store state in local storage to prevent loss after mounting (refresh/redirect)
@@ -28,7 +29,7 @@ function App() {
           <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />} exact />
           <Route path='/register' element={<Register setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}  exact />
           <Route path='/dashboard' element={<Dashboard isLoggedIn={isLoggedIn} user={user} />} exact />
-          <Route path='/dashboard/project' exact />
+          <Route path='/dashboard/project' element={<ProjectView isLoggedIn={isLoggedIn} />} exact />
           <Route path='/logout' element={<Logout setIsLoggedIn={setIsLoggedIn} />} exact />
         </Routes>
       </Router>

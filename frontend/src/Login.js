@@ -65,7 +65,7 @@ export default function Login(props) {
             <div className="w-100 text-center mt-2">
                 Need an account? <Link to="/register">Register</Link>
             </div>
-            <Button onClick={() => props.setIsLoggedIn(!props.isLoggedIn)}>Debug Login</Button>
+            <Button onClick={() => {props.setIsLoggedIn(!props.isLoggedIn); navigate('/dashboard');}}>Debug Login</Button>
         </div>
         </>
     );
