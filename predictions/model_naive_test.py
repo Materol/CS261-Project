@@ -3,12 +3,13 @@
 import unittest
 
 from predictions.critical_success_factors import OF1, OF4, OF5, OF6, TF1, TF2, PF5
+from predictions.feedback import Feedback
 from predictions.model_naive import ModelNaive
 from predictions.success_metrics import OVERALL
 from predictions.utils import create_csf_map, create_prediction_map
 
 
-class TestPredictionModel(unittest.TestCase):
+class TestModelNaive(unittest.TestCase):
     """Tests for generic models and CSF."""
 
     def test_min(self):
@@ -75,6 +76,34 @@ class TestPredictionModel(unittest.TestCase):
         test_prediction[OVERALL] = 5.0
 
         self.assertEqual(actual_prediction, test_prediction)
+
+    def test_feedback(self):
+        """Test the naive model feedback."""
+        model = ModelNaive()
+        data = create_csf_map()
+        data[OF4] = 5
+        data[OF5] = 5
+        data[OF6] = 5
+        data[TF1] = 5
+        data[TF2] = 5
+        data[PF5] = 1
+        actual_feedback = model.give_feedback(data)
+
+        expected_prediction = create_prediction_map()
+        expected_prediction[OVERALL] = 5.0
+
+        expected_msg = (
+            "Your project's success is very likely. We recommend you "
+            "continue with your current strategy.")
+        expected_feedback = Feedback(
+            feedback=expected_msg,
+            predictions=expected_prediction,
+        )
+
+        self.assertEqual(actual_feedback.get_feedback(),
+                         expected_feedback.get_feedback())
+        self.assertEqual(actual_feedback.get_predictions(),
+                         expected_feedback.get_predictions())
 
 
 if __name__ == '__main__':

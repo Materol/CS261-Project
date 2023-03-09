@@ -4,10 +4,11 @@ prediction function, mapping Critical Success Factors to some prediction of
 project success.
 """
 
-from typing import Dict, List
+from typing import Dict
 
 from predictions.critical_success_factors import CSF
 from predictions.success_metrics import SuccessMetric
+from predictions.feedback import Feedback
 
 
 class Model:
@@ -22,3 +23,7 @@ class Model:
     def train(train_x, train_y, test_x, test_y):
         """Train the model."""
         raise NotImplementedError("Model.train() not implemented.")
+
+    def give_feedback(self) -> Feedback:
+        """Give feedback on how to improve the output."""
+        raise NotImplementedError("Model.give_feedback() not implemented.")

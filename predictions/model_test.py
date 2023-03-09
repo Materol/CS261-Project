@@ -6,7 +6,7 @@ from predictions.critical_success_factors import CSF, ALL_CSFS
 from predictions.success_metrics import SuccessMetric, ALL_SUCCESS_METRICS
 
 
-class TestPredictionModel(unittest.TestCase):
+class TestModel(unittest.TestCase):
     """Tests for generic models and CSF."""
 
     def test_csf_init(self):
