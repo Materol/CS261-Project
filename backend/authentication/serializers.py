@@ -24,3 +24,4 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = settings.AUTH_USER_MODEL
         fields = ('email', 'user_name', 'first_name')
         extra_kwargs = {'password': {'write_only': True}}
+        
