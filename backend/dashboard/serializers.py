@@ -16,11 +16,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 #Serializer for project reading
 class ProjectSerializerDashboard(serializers.ModelSerializer):
+    
+    history = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
         fields = ('id', 'name', 'description', 'CSFs', 'currentMetric',
-                  'metricHistory', 'feedback', 'members')
+                  'metricHistory', 'feedback', 'members', 'history')
+        read_only_fields = ('history',)
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
@@ -38,6 +41,10 @@ class ProjectSerializerDashboard(serializers.ModelSerializer):
         instance.members = validated_data.get('members', instance.members)
         instance.save()
         return instance
+    
+    def get_history(self, obj):
+        model_history = obj.history.filter(id=obj.pk).values('currentMetric').order_by('-history_date')
+        return model_history
 
 
 #Serializer for project creation

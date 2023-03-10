@@ -72,3 +72,7 @@ class ProjectDetail(generics.RetrieveAPIView):
 class DeleteProject(generics.DestroyAPIView):
     serializer_class = ProjectSerializerDashboard
     queryset = Project.objects.all()
+        
+class UpdateProject(generics.UpdateAPIView):
+    serializer_class = ProjectSerializerDashboard
+    queryset = Project.objects.all()

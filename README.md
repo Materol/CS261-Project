@@ -9,7 +9,7 @@ Packages / Instructions:
 
 In one:
 - `python3 -m venv venv in one`
-- `pip install django djangorestframework djangorestframework-simplejwt django-rest-auth django-allauth django-cors-headers`
+- `pip install django djangorestframework djangorestframework-simplejwt django-rest-auth django-allauth django-cors-headers django-simple-history`
 - `pip install pyjwt==1.7.1`
 - `pip install numpy`
 - `pip install -U scikit-learn`
