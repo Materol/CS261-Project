@@ -7,6 +7,10 @@ import {IoMdArrowRoundBack, IoMdInformationCircleOutline} from 'react-icons/io';
 import { Button, Container, Row, Col, Card, ListGroup, ProgressBar, Accordion, Table, OverlayTrigger, Tooltip, Popover, Pagination} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style/ProjectView.css';
+
+//import axios to use backend data
+import axiosInstance from './axiosApi';
+
 // component to view details of individual project
 export default function ProjectView(props) {
     
@@ -30,12 +34,23 @@ export default function ProjectView(props) {
         if (props.isLoggedIn == false) {
             navigate('/login');
         }
+
         // insert axios call to get project details using 'id'
         // store in following format into projects via 'setProject':
         // {name: (string), description: (string), generalFeedback: (string), metricHistory: [[{MetricDescription: (string), MetricScore: (float), Feedback: (string)}]], members: [MemberName (string)]}
         // (see below for how there's 2 lists of metrics for each. It should be in ascending order of age)
         // e.g. [0] is oldest, [-1] is newest. Means you can just .push updates to the 'history' list.
         // then they can be split up, first 4 are process, next 10 are product and last 3 are stakeholder.
+
+
+        //TODO: Format returned project data and set in projects
+
+        //Get project details from backend
+        axiosInstance.get('projects/detail/' + projectId).then((res) => {
+			console.log(res.data);
+		});
+
+
         setProcessM([
             [{MetricDescription: 'Metric 1', MetricScore: 3.5, Feedback: 'Placeholder'},
             {MetricDescription: 'Metric 2', MetricScore: 4.5, Feedback: 'Placeholder'},
@@ -330,4 +345,6 @@ export default function ProjectView(props) {
         </>
     )
 }
+
+
                                 

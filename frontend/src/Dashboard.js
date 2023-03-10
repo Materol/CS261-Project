@@ -8,6 +8,12 @@ import './style/Dashboard.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-circular-progressbar/dist/styles.css';
 // dashboard component
+
+//import axios to use backend data
+import axiosInstance from './axiosApi';
+
+
+
 export default function Dashboard(props) {
     // state variables
     const [projects, setProjects] = useState([
@@ -26,10 +32,41 @@ export default function Dashboard(props) {
         if (props.isLoggedIn == false) {
             navigate('/login');
         }
+
+
+
+
+
         // fetch user's projects using their token (localStorage.getItem('access_token'))
         // insert axios call to get user's projects from django backend
         // store in following format into projects via 'setProjects':
         // {id (int), name (string), description (string), successChance (int/100)}
+
+
+        //TODO: Filter projects to user's only
+        //Get projects from backend and format to frontend values
+        axiosInstance.get('/projects').then((res) => {
+
+            //array of all project objects returned
+			const allProjects = res.data;
+
+            //temp values
+            let tempProject = {id:0, name: "", description:"", successChance:0};
+            const tempProjects = []
+
+            //Iterate through each project and get the data needed for front-end
+            allProjects.forEach(myFunction);
+
+            function myFunction(item){
+                tempProject = {id: item.id, name: item.name, description: item.description, successChance:0};
+                tempProjects.push(tempProject)
+
+            }
+			console.log(tempProjects);
+
+            //Set dashboard projects to projects returned
+            setProjects(tempProjects);
+		});
 
 
     }, []);

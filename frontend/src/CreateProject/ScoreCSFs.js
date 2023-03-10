@@ -5,9 +5,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function ScoreCSFs({handleNext, data}) {
     const [CSFs, setCSFs] = useState(data.CSFs);
+    const [JSONCSFs, setJSONCSFs] = useState(data.JSONCSFs);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [show, setShow] = useState(true);
-    console.log("Current CSF score " + CSFs[currentIndex].score)
     // mapping score to human answers
     const scoreLabels = {
         1: "Poor",
@@ -27,10 +27,27 @@ export default function ScoreCSFs({handleNext, data}) {
     const handleScoreSelect = (event) => {
         const { value } = event.target;
         console.log(value);
-        // update the CSFs results after every answer.
+        // update the CSF and JSONCSFs results after every answer.
+
+        //temp variables
         const tempCSFs = CSFs;
+        const tempname = CSFs[currentIndex].name;
+        const tempscore = CSFs[currentIndex].score;
+        console.log("Current CSF Name " + tempname);
+        console.log("Current CSF Score " + tempscore);
+        const tempJSONCSFs = JSONCSFs;
+        console.log("Current JSONCSF Score " + tempJSONCSFs[tempname]);
+
+        //set CSF to score inputted in temp JSONCSF and CSF
+        tempJSONCSFs[tempname] = parseInt(value);
+        console.log("Updated JSONCSF score " + JSONCSFs[tempname]);
         tempCSFs[currentIndex].score = value;
+        console.log("Updated CSF Score " + value);
+
+        //Update original values
         setCSFs(tempCSFs);
+        setJSONCSFs(tempJSONCSFs);
+
         // toggle fade to show next question
         setShow(false);
         event.target.checked = false;

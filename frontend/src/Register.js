@@ -7,10 +7,16 @@ import { Link } from 'react-router-dom';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+//import axios to use backend data
+import axiosInstance from './axiosApi';
+
+
 // register function component
 export default function Register(props) {
     // state variables
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [error, setError] = useState('');
@@ -24,26 +30,33 @@ export default function Register(props) {
         }
     }, [navigate]);
 
-    async function handleSubmit(e) {
-        e.preventDefault();
+    
+    //TODO: Add set error / set loading
+
+    //Creates user and logs them in
+	const handleSubmit = (e) => {
+		e.preventDefault();
+        
+
         // password check
         if (password !== passwordConfirm) {
             return setError('Passwords do not match');
         }
+        
+		axiosInstance
+			.post(`user/create/`, {
+				email: email,
+                user_name: username,
+				password: password,
+			})
+			.then((res) => {
+                props.setUser(username)
+                props.setIsLoggedIn(true);
+				navigate('/dashboard');
+			});
+	};
 
-        try {
-            setError('');
-            setLoading(true);
 
-            // insert axios call to register in django backend, 
-            // if successful, navigate to dashboard otherwise show error
-            
-            props.setIsLoggedIn(true);
-        } catch {
-            setError('Failed to create an account');
-        }
-        setLoading(false);
-    }
     return (
         <>
         <div className='registerCard'>
@@ -55,6 +68,10 @@ export default function Register(props) {
                     <Form.Group id="email">
                     <Form.Label className='rEmailLabel'>Email</Form.Label>
                     <Form.Control type="email" required onChange={e => setEmail(e.target.value)} />
+                    </Form.Group>
+                    <Form.Group id="username">
+                    <Form.Label className='rUsernameLabel'>Username</Form.Label>
+                    <Form.Control type="text" required onChange={e => setUsername(e.target.value)} />
                     </Form.Group>
                     <Form.Group id="password">
                     <Form.Label className='rPasswordLabel'>Password</Form.Label>
@@ -75,3 +92,5 @@ export default function Register(props) {
         </>
     );
     }
+
+    
