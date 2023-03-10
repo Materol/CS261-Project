@@ -1,9 +1,4 @@
 /* css for the title of the project in the middle of the page */
-.projectViewContainer{
-    padding: 0;
-    margin-left: 15%;
-    margin-right: 15%;
-}
 .projectViewHeader{
     width: 75%;
     position: relative;

@@ -42,7 +42,7 @@ export default function Dashboard(props) {
                         <h1 >{props.user}'s Projects 📝</h1>
                         <div className='splitter'/>
                     </span>
-                    <Button className='newProjectButton' variant='success' onClick={() => navigate('/dashboard/newproject')}>New Project</Button>
+                    <Button className='newProjectButton' variant='success' onClick={() => navigate('/dashboard/createproject')}>New Project</Button>
                 </div>
                 {projects.length != 0 ?
                     <Carousel variant="dark" className='projectsSlider'>
@@ -131,7 +131,7 @@ export default function Dashboard(props) {
                     :
                     <div className='noProjects'>
                         <h1>You have no projects yet!</h1>
-                        <Button variant='success' onClick={() => navigate('/dashboard/newproject')}>Make one now! 🖥️</Button>
+                        <Button variant='success' onClick={() => navigate('/dashboard/createproject')}>Make one now! 🖥️</Button>
                     </div>
                 }
             </div>
