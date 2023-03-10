@@ -13,6 +13,8 @@ In one:
 - `pip install pyjwt==1.7.1`
 - `pip install numpy`
 - `pip install -U scikit-learn`
+- `python backend/manage.py makemigrations`
+- `python backend/manage.py migrate`
 - `python backend/manage.py runserver`
 
 in another:
