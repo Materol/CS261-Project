@@ -3,12 +3,18 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { CSFs } from '../CreateProject/CSFs.js';
+import { JSONCSFs } from '../CreateProject/JSONCSFs.js';
 import ScoreCSFs from '../CreateProject/ScoreCSFs';
 import Details from './Details';
 import EditPage from './EditPage';
 
 import '../style/CreateProj.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+//import axios to use backend data
+import axiosInstance from '../axiosApi';
+
+
 // create project component
 export default function CreateProj(props) {
 
@@ -16,11 +22,12 @@ export default function CreateProj(props) {
   const location = useLocation();
   const navigate = useNavigate();
   const CSF = CSFs
+  const JSONCSF = JSONCSFs
   // state variables
   const [currentPage, setCurrentPage] = useState(0);
   console.log("MEMBERS: " + location.projectMembers)
   const {projectName, projectDescription, projectMembers} = location.state;
-  const [data, setData] = useState({name: projectName, description: projectDescription, CSFs: CSF, members: projectMembers});
+  const [data, setData] = useState({name: projectName, description: projectDescription, CSFs: CSF,  JSONCSFs: JSONCSF, members: projectMembers});
   const pageTitles = ["Edit", "CSFs", "Name and Description"];
 
   // handler to check if user is already logged in
@@ -30,12 +37,20 @@ export default function CreateProj(props) {
     }
   }, []);
 
-  // handler to create project
-  const updateProject = () => {
-    // insert axios call to create project in django backend
-    // navigate to dashboard
-    navigate(-1);
-  }
+  //Create new project and post to backend (api/projects/create) then navigate to dashboard
+	const updateProject = () => {
+		
+		axiosInstance
+			.post(`projects/create/`, {
+				name: data.name,
+				description: data.description,
+				CSFs: data.JSONCSFs,
+				members: {"members":data.members},
+			})
+			.then((res) => {
+				navigate('/dashboard');
+			});
+	};
   // page to welcome the user and ask them to create a project
 
   const goBack = (newData) => {

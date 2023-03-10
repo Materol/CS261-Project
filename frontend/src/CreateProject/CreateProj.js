@@ -3,9 +3,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { CSFs } from './CSFs.js';
+import { JSONCSFs } from './JSONCSFs.js';
 import NameAndDetails from './NameAndDetails';
 import ScoreCSFs from './ScoreCSFs';
 import Review from './Review';
+
+
+//import axios to use backend data
+import axiosInstance from '../axiosApi';
+
 
 import '../style/CreateProj.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,7 +19,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 export default function CreateProj(props) {
   // state variables
   const [currentPage, setCurrentPage] = useState(0);
-  const [data, setData] = useState({name: '', description: '', CSFs: CSFs, members: []});
+  const [data, setData] = useState({name: '', description: '', CSFs: CSFs, JSONCSFs: JSONCSFs, members: []});
   const [review, setReview] = useState(false);
 
   const pageTitles = ["Name and Description", "CSFs", "Review"];
@@ -28,12 +34,25 @@ export default function CreateProj(props) {
     }
   }, []);
 
-  // handler to create project
-  const createProject = () => {
-    // insert axios call to create project in django backend
-    // navigate to dashboard
-    navigate('/dashboard');
-  }
+  
+  //Create new project and post to backend (projects/create) then navigate to dashboard
+	const createProject = (e) => {
+		e.preventDefault();
+
+
+		axiosInstance
+			.post(`projects/create/`, {
+				name: data.name,
+				description: data.description,
+				CSFs: data.JSONCSFs,
+				members: {"members":data.members},
+			})
+			.then((res) => {
+				navigate('/dashboard');
+			});
+	};
+
+  //}
   // page to welcome the user and ask them to create a project
 
   const handleNext = (newData) => {

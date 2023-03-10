@@ -2,6 +2,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
+
+//import axios to use backend data
+import axiosInstance from './axiosApi';
+
 export default function Delete() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -9,6 +13,8 @@ export default function Delete() {
     // when ran, delete the project
     useEffect(() => {
         // delete the project through django using project id, then redirect to dashboard.
+		axiosInstance.delete('admin/delete/' + id);
         navigate('/dashboard', { replace: true });
+
     }, []);
 }
