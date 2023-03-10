@@ -26,33 +26,35 @@ export default function Login(props) {
         }
     }, [navigate]);
 
-
-    //On submit it gives the tokens to the user for auth purposes
+  //On submit it gives the tokens to the user for auth purposes
 	const handleSubmit = (e) => {
-		
-        //Error handling
         e.preventDefault();
-
-        //TO DO: Add set loading / set error
-
-		axiosInstance
-			.post(`token/`, {
-				email: email,
-				password: password,
-			})
+        try {
+            axiosInstance
+            .post(`token/`, {
+                email: email,
+                password: password,
+            })
             //Storing tokens locally for auth
-			.then((res) => {
-				localStorage.setItem('access_token', res.data.access);
-				localStorage.setItem('refresh_token', res.data.refresh);
+            .then((res) => {
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
                 //Send across access token for auth
-				axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
-                //If gotten response, navigate to dashboard
-                props.setUser(username)
-                props.setIsLoggedIn(true);
-				navigate('/dashboard');
-			});
-	};
+                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
+                //If good, navigate to dashboard
+                //navigate('/dashboard');
+            });
+            props.setIsLoggedIn(true);
+            props.setUser(username);
 
+            //If good, navigate to dashboard
+            navigate('/dashboard');
+
+        } catch {
+            setError('Password and Email did not match');
+        }
+        setLoading(false);
+    } 
 
     return (
         <>
@@ -90,5 +92,3 @@ export default function Login(props) {
         </>
     );
     }
-    
-

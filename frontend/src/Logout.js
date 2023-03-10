@@ -1,6 +1,11 @@
 // logout component
-import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+
+//import axios to use backend data
+import axiosInstance from './axiosApi';
+
 
 
 //import axios to use backend data
@@ -15,15 +20,14 @@ export default function Logout(props) {
         if (localStorage.getItem('access_token') != null) {
 
             // insert axios call to logout in django backend to blacklist the token
-
-            axiosInstance.post('user/logout/blacklist/', {
+            const response = axiosInstance.post('user/logout/blacklist/', {
                 refresh_token: localStorage.getItem('refresh_token'),
             });
 
-            //Clear tokens from local storage
             localStorage.clear('access_token');
             localStorage.clear('refresh_token');
             localStorage.clear('user');
+
             axiosInstance.defaults.headers['Authorization'] = null;
             props.setIsLoggedIn(false);
         }
@@ -32,7 +36,7 @@ export default function Logout(props) {
     }, []);
 
     return (
-        <div>   
+        <div>
             <h1>Logging Out...</h1>
         </div>
     );

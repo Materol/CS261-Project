@@ -1,11 +1,16 @@
 // necessary imports
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style/Register.css'
+import './style/Register.css';
 // import { useAuth } from './AuthContext';
-import { Link } from 'react-router-dom';
-import { Form, Button, Card, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Alert, Button, Card, Form } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
+
+//import axios to use backend data
+import axiosInstance from './axiosApi';
+
 
 
 //import axios to use backend data
@@ -30,32 +35,28 @@ export default function Register(props) {
         }
     }, [navigate]);
 
-    
-    //TODO: Add set error / set loading
-
     //Creates user and logs them in
-	const handleSubmit = (e) => {
-		e.preventDefault();
-        
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
         // password check
         if (password !== passwordConfirm) {
             return setError('Passwords do not match');
         }
-        
-		axiosInstance
-			.post(`user/create/`, {
-				email: email,
+
+        axiosInstance
+            .post(`user/create/`, {
+                email: email,
                 user_name: username,
-				password: password,
-			})
-			.then((res) => {
+                password: password,
+            })
+            //NEED TO: Change navigation to project page
+            .then((res) => {
                 props.setUser(username)
                 props.setIsLoggedIn(true);
-				navigate('/dashboard');
-			});
-	};
-
+                navigate('/dashboard');
+            });
+    };
 
     return (
         <>

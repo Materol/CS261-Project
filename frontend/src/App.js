@@ -1,14 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Login from './Login';
-import Register from './Register';
+import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './Dashboard';
-import NavBar from './NavBar/NavBar';
+import Login from './Login';
 import Logout from './Logout';
+import NavBar from './NavBar/NavBar';
 import ProjectView from './ProjectView';
 import CreateProj from './CreateProject/CreateProj';
 import EditProj from './EditProject/EditProj';
 import Delete from './Delete';
+import Register from './Register';
 
 function App() {
   // store state in local storage to prevent loss after mounting (refresh/redirect)
@@ -16,7 +16,7 @@ function App() {
     JSON.parse(localStorage.getItem('isLoggedIn')) || false
   );
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem('user')) || 'Jonathan Joestar'
+    localStorage.getItem('user') || 'Jonathan Joestar'
   );
   // when mounting, check if user is logged in in local storage and update state
   useEffect(() => {
