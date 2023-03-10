@@ -5,6 +5,9 @@ import Login from './Login';
 import Logout from './Logout';
 import NavBar from './NavBar/NavBar';
 import ProjectView from './ProjectView';
+import CreateProj from './CreateProject/CreateProj';
+import EditProj from './EditProject/EditProj';
+import Delete from './Delete';
 import Register from './Register';
 
 function App() {
@@ -29,7 +32,10 @@ function App() {
           <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />} exact />
           <Route path='/register' element={<Register setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}  exact />
           <Route path='/dashboard' element={<Dashboard isLoggedIn={isLoggedIn} user={user} />} exact />
+          <Route path='/dashboard/createproject' element={<CreateProj isLoggedIn={isLoggedIn} />} exact />
           <Route path='/dashboard/project' element={<ProjectView isLoggedIn={isLoggedIn} />} exact />
+          <Route path='/dashboard/project/edit' element={<EditProj isLoggedIn={isLoggedIn} />} exact />
+          <Route path='/dashboard/project/delete' element={<Delete />} exact />
           <Route path='/logout' element={<Logout setIsLoggedIn={setIsLoggedIn} />} exact />
         </Routes>
       </Router>

@@ -12,6 +12,11 @@ import { Link } from 'react-router-dom';
 import axiosInstance from './axiosApi';
 
 
+
+//import axios to use backend data
+import axiosInstance from './axiosApi';
+
+
 // register function component
 export default function Register(props) {
     // state variables
@@ -30,44 +35,9 @@ export default function Register(props) {
         }
     }, [navigate]);
 
-    /* async function handleSubmit(e) {
-        e.preventDefault();
-        // password check
-        if (password !== passwordConfirm) {
-            return setError('Passwords do not match');
-        }
-
-        try {
-            setError('');
-            setLoading(true);
-
-            // insert axios call to register in django backend,
-            // if successful, navigate to dashboard otherwise show error
-
-            axiosInstance
-            .post(`user/create/`, {
-                email: email,
-                user_name: username,
-                password: password,
-            })
-            //NEED TO: Change navigation to project page
-            .then((res) => {
-                navigate('/dashboard');
-            });
-
-
-            props.setUser(email);
-            props.setIsLoggedIn(true);
-        } catch {
-            setError('Failed to create an account');
-        }
-        setLoading(false);
-    } */
-
     //Creates user and logs them in
     const handleSubmit = (e) => {
         e.preventDefault();
-
 
         // password check
         if (password !== passwordConfirm) {
@@ -87,9 +57,6 @@ export default function Register(props) {
                 navigate('/dashboard');
             });
     };
-
-
-
 
     return (
         <>
@@ -126,3 +93,5 @@ export default function Register(props) {
         </>
     );
     }
+
+    

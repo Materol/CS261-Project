@@ -26,20 +26,10 @@ export default function Login(props) {
         }
     }, [navigate]);
 
-
-    // handle login request
-    /* async function handleSubmit(e) {
+  //On submit it gives the tokens to the user for auth purposes
+	const handleSubmit = (e) => {
         e.preventDefault();
-        setError('');
-        setLoading(true);
-
         try {
-            //setError('');
-            //setLoading(true);
-
-            // insert axios call to login in django backend, if successful, navigate to dashboard otherwise show error
-            // also, change the state of isLoggedIn to true
-
             axiosInstance
             .post(`token/`, {
                 email: email,
@@ -54,10 +44,8 @@ export default function Login(props) {
                 //If good, navigate to dashboard
                 //navigate('/dashboard');
             });
-
-
             props.setIsLoggedIn(true);
-            props.setUser(email);
+            props.setUser(username);
 
             //If good, navigate to dashboard
             navigate('/dashboard');
@@ -66,31 +54,7 @@ export default function Login(props) {
             setError('Password and Email did not match');
         }
         setLoading(false);
-    } */
-
-    //On submit it gives the tokens to the user for auth purposes
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // TODO: Add set loading / set error / set logged in?
-
-        axiosInstance
-            .post(`token/`, {
-                email: email,
-                password: password,
-            })
-            //Storing tokens locally for auth
-            .then((res) => {
-                localStorage.setItem('access_token', res.data.access);
-                localStorage.setItem('refresh_token', res.data.refresh);
-                //Send across access token for auth
-                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
-                //If good, navigate to dashboard
-                props.setUser(username)
-                props.setIsLoggedIn(true);
-                navigate('/dashboard');
-            });
-    };
+    } 
 
     return (
         <>
