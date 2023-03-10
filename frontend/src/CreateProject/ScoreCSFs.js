@@ -12,14 +12,16 @@ export default function ScoreCSFs({handleNext, data}) {
     const scoreLabels = {
         1: "Poor",
         2: "Below Average",
-        3: "Above Average",
-        4: "Excellent",
+        3: "Average",
+        4: "Above Average",
+        5: "Excellent",
     };
     const colourMap = {
-        1: "rgb(255, 0, 0, 0.5)",
-        2: "rgb(255, 255, 0, 0.5)",
-        3: "rgb(0, 255, 0, 0.5)",
-        4: "rgb(0, 255, 255, 0.5)",
+        1: "#ff0000",
+        2: "#ff8000",
+        3: "#ffff00",
+        4: "#00ff00",
+        5: "#00ffff",
     }
     // called when a radio check is clicked
     const handleScoreSelect = (event) => {
@@ -67,9 +69,9 @@ export default function ScoreCSFs({handleNext, data}) {
                     <Container>
                         {/* make each of the radio button by mapping 1-4 */}
                         <Row className="radios">
-                            {[1, 2, 3, 4].map((score) => (
+                            {[1, 2, 3, 4, 5].map((score) => (
                                 <Col 
-                                    sm={3} // colour based on label
+                                    // colour based on label
                                     style={{padding: '0.5%',backgroundColor: colourMap[score]}}
                                     onClick={() => { // allows the background to be clicked instead of just the radio button
                                         const radioBtn = document.getElementById(`score-${score}`);
