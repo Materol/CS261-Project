@@ -1,4 +1,3 @@
-
 #Serializers will return data in the right format from the database to REACT
 
 from rest_framework import serializers
@@ -8,9 +7,11 @@ from django.conf import settings
 
 #Project fields for admin
 class ProjectSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'CSFs', 'currentMetric','metricHistory', 'feedback', 'members')
+        fields = ('id', 'name', 'description', 'CSFs', 'currentMetric',
+                  'metricHistory', 'feedback', 'members')
 
 
 #Simple user model override

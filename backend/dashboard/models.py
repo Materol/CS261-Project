@@ -1,5 +1,6 @@
 from django.db import models
 
+
 #The main model for a project
 class Project(models.Model):
 
@@ -17,4 +18,3 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
-  
