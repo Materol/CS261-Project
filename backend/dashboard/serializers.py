@@ -56,3 +56,4 @@ class CreateProjectSerializer(serializers.ModelSerializer):
         instance.members = validated_data.get('members', instance.members)
         instance.save()
         return instance
+    
