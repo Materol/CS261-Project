@@ -20,25 +20,3 @@ class Project(models.Model):
     
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
