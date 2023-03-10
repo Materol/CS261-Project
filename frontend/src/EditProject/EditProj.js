@@ -41,7 +41,7 @@ export default function CreateProj(props) {
 	const updateProject = () => {
 		
 		axiosInstance
-			.post(`projects/create/`, {
+			.post(`projects/edit/projectdetail` + projectID, {
 				name: data.name,
 				description: data.description,
 				CSFs: data.JSONCSFs,
