@@ -19,8 +19,17 @@ class ProjectSerializerDashboard(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'CSFs', 'currentMetric',
-                  'metricHistory', 'feedback', 'members', 'feedbackHistory',)
+        fields = (
+            'id',
+            'name',
+            'description',
+            'CSFs',
+            'currentMetric',
+            'metricHistory',
+            'feedback',
+            'members',
+            'feedbackHistory',
+        )
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
@@ -47,8 +56,18 @@ class CreateProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'name', 'description', 'CSFs', 'currentMetric',
-                  'metricHistory', 'feedback', 'members', 'owner', 'feedbackHistory',)
+        fields = (
+            'id',
+            'name',
+            'description',
+            'CSFs',
+            'currentMetric',
+            'metricHistory',
+            'feedback',
+            'members',
+            'owner',
+            'feedbackHistory',
+        )
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)

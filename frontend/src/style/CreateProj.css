@@ -1,57 +1,57 @@
 .fade {
-    transition-duration: 0.5s;
-  }
+  transition-duration: 0.5s;
+}
 
-.formContainer{
-    position: relative;
-    margin-top: 5%;
-    padding: 5%;
-    border-radius: 50px;
-    border: 5px solid #1b849e;
+.formContainer {
+  position: relative;
+  margin-top: 5%;
+  padding: 5%;
+  border-radius: 50px;
+  border: 5px solid #1b849e;
 }
-.innerContainer{
-    padding: 3%;
-    background-color: #f1f1f1;
-    border-radius: 50px;
-    border: 1px solid #ccc;
+.innerContainer {
+  padding: 3%;
+  background-color: #f1f1f1;
+  border-radius: 50px;
+  border: 1px solid #ccc;
 }
-.radios{
-    overflow: hidden;
-    margin-top:5%;
-    padding: 0;
-    border: 1px solid #9D231B;
-    background-color: white;
-    border-radius: 100px; 
-    font-size: 1.2vw;
+.radios {
+  overflow: hidden;
+  margin-top: 5%;
+  padding: 0;
+  border: 1px solid #9d231b;
+  background-color: white;
+  border-radius: 100px;
+  font-size: 1.2vw;
 }
-.createTitle{
-    display: flex;
-    background-color: antiquewhite;
-    padding: 1%;
-    border: 1px solid black;
-    border-radius: 100px;
-    position: absolute;
-    top: 0;
-    left: 5%;
-    transform: translate(-50%, -50%);
-    justify-content: flex-end;
+.createTitle {
+  display: flex;
+  background-color: antiquewhite;
+  padding: 1%;
+  border: 1px solid black;
+  border-radius: 100px;
+  position: absolute;
+  top: 0;
+  left: 5%;
+  transform: translate(-50%, -50%);
+  justify-content: flex-end;
 }
-.createSubTitle{
-    background-color: lightblue;
-    padding: 1%;
-    border: 1px solid black;
-    border-radius: 100px;
-    position: absolute;
-    top: 0;
-    right: 50%;
-    transform: translate(50%, -50%);
-    justify-content: flex-end;
+.createSubTitle {
+  background-color: lightblue;
+  padding: 1%;
+  border: 1px solid black;
+  border-radius: 100px;
+  position: absolute;
+  top: 0;
+  right: 50%;
+  transform: translate(50%, -50%);
+  justify-content: flex-end;
 }
-.splitter{
-    border-left: 1px solid gray;
-    margin-left: 15px;
+.splitter {
+  border-left: 1px solid gray;
+  margin-left: 15px;
 }
-.editButton{
-    width: 100%;
-    margin-top: 5%;
+.editButton {
+  width: 100%;
+  margin-top: 5%;
 }

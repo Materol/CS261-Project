@@ -19,6 +19,7 @@ trainer = Trainer(seed=415324)
 knn = ModelKNN()
 trainer.train_model(knn)
 
+
 #View for the dashboard - viewing multiple projects
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializerDashboard
@@ -44,7 +45,8 @@ class CreateProject(generics.CreateAPIView):
         metricHistory = serializer.validated_data.get('metricHistory') or None
         CSFs = serializer.validated_data.get('CSFs')
         feedback = serializer.validated_data.get('feedback') or None
-        feedbackHistory = serializer.validated_data.get('feedbackHistory') or None
+        feedbackHistory = serializer.validated_data.get(
+            'feedbackHistory') or None
         owner = serializer.validated_data.get('owner')
 
         # Current Metric should be empty by default as there is no entry on
@@ -90,6 +92,7 @@ class DeleteProject(generics.DestroyAPIView):
     serializer_class = ProjectSerializerDashboard
     queryset = Project.objects.all()
 
+
 # Update a project
 class UpdateProject(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
@@ -102,12 +105,13 @@ class UpdateProject(generics.GenericAPIView):
         # Add your implementation for POST requests here
         print(request.data)
         instance = Project.objects.get(pk=pk)
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer = self.get_serializer(instance,
+                                         data=request.data,
+                                         partial=True)
         if serializer.is_valid():
             self.update_fields(serializer, instance)
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     def update_fields(self, serializer, instance):
         # Get input data

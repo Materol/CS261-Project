@@ -1,23 +1,23 @@
-.registerCard{
-    width: 23%;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
-    margin: 0 auto;
-    margin-top: 100px;
-    padding: 20px;
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
+.registerCard {
+  width: 23%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  margin-top: 100px;
+  padding: 20px;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
 }
-.w-100{
-    margin-top: 10px;
+.w-100 {
+  margin-top: 10px;
 }
-.rPasswordLabel{
-    margin-top: 10px;
+.rPasswordLabel {
+  margin-top: 10px;
 }
-.rEmailLabel{
-    margin-top: 10px;
+.rEmailLabel {
+  margin-top: 10px;
 }
-.rPasswordConfirmLabel{
-    margin-top: 10px;
+.rPasswordConfirmLabel {
+  margin-top: 10px;
 }

@@ -1,57 +1,57 @@
-.project{
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 5px #ccc;
-    width: 400px;
+.project {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 5px #ccc;
+  width: 400px;
 }
-.projectsSlider{
-    border: 5px solid #1b849e;
-    padding-top: 3.5%;
-    padding-bottom: 4%;
-    border-radius: 50px;
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
-    background-color: #fbfafa;
+.projectsSlider {
+  border: 5px solid #1b849e;
+  padding-top: 3.5%;
+  padding-bottom: 4%;
+  border-radius: 50px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fbfafa;
 }
-.projectsContainer{
-    padding: 0;
-    margin-left: 15%;
-    margin-right: 15%;
+.projectsContainer {
+  padding: 0;
+  margin-left: 15%;
+  margin-right: 15%;
 }
-.projectName{
-    text-align: center;
-    font-size: 1.5vw;
+.projectName {
+  text-align: center;
+  font-size: 1.5vw;
 }
-.dashboardHeader{
-    border: 5px solid #1b849e;
-    background-color: #f5f5f5;
-    margin-top: 3.5%;
-    padding-top: 2%;
-    padding-bottom: 2%;
-    padding-left: 5%;
-    padding-right: 5%;
-    border-radius: 50px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 2vw;
-    margin-bottom: 2%;
+.dashboardHeader {
+  border: 5px solid #1b849e;
+  background-color: #f5f5f5;
+  margin-top: 3.5%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  padding-left: 5%;
+  padding-right: 5%;
+  border-radius: 50px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 2vw;
+  margin-bottom: 2%;
 }
-.newProjectButton{
-    width: 25%;
+.newProjectButton {
+  width: 25%;
 }
-.projectsTitle{
-    display: flex;
+.projectsTitle {
+  display: flex;
 }
-.splitter{
-    border-left: 1px solid gray;
-    margin-left: 15px;
+.splitter {
+  border-left: 1px solid gray;
+  margin-left: 15px;
 }
-.noProjects{
-    text-align: center;
-    font-size: 2vw;
-    margin-top: 5%;
-    padding: 5%;
-    border: 5px solid #1b849e;
-    background-color: #f5f5f5;
-    border-radius: 50px;
+.noProjects {
+  text-align: center;
+  font-size: 2vw;
+  margin-top: 5%;
+  padding: 5%;
+  border: 5px solid #1b849e;
+  background-color: #f5f5f5;
+  border-radius: 50px;
 }
