@@ -5,9 +5,6 @@ from .models import Project
 from .serializers import ProjectSerializerDashboard, CreateProjectSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-
-
-
 from .predictions.trainer import Trainer
 from .predictions.model_knn import ModelKNN
 from .predictions.utils import to_json_success_metrics
@@ -21,9 +18,6 @@ trainer = Trainer(seed=415324)
 # server as training takes a long time.
 knn = ModelKNN()
 trainer.train_model(knn)
-
-# Create your views here.
-
 
 #View for the dashboard - viewing multiple projects
 class ProjectList(generics.ListCreateAPIView):
@@ -106,22 +100,18 @@ class UpdateProject(generics.GenericAPIView):
 
     def post(self, request, pk, format=None):
         # Add your implementation for POST requests here
-        print("were in the post")
-        print(pk)
         print(request.data)
         instance = Project.objects.get(pk=pk)
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
-            self.update_fields(serializer)
+            self.update_fields(serializer, instance)
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    def update_fields(self, serializer):
-        # Get inputted data
-        metricHistory = serializer.validated_data.get('metricHistory') or None
+    def update_fields(self, serializer, instance):
+        # Get input data
         CSFs = serializer.validated_data.get('CSFs')
-        feedbackHistory = serializer.validated_data.get('feedbackHistory') or None
         description = serializer.validated_data.get('description')
         name = serializer.validated_data.get('name')
         members = serializer.validated_data.get('members')
@@ -136,24 +126,19 @@ class UpdateProject(generics.GenericAPIView):
         timestamp = int(time.time())
 
         # Create a json mapping timestamp to the metrics for history
-        if metricHistory is None:
-            metricHistory = {timestamp: currentMetric}
-        else:
-            metricHistory = json.loads(metricHistory)
-            metricHistory[timestamp] = currentMetric
+        metricHistory = instance.metricHistory
+        metricHistory[timestamp] = currentMetric
 
         # Create a json mapping timestamp to the feedback for history
-        if feedbackHistory is None:
-            feedbackHistory = {timestamp: feedback}
-        else:
-            feedbackHistory = json.loads(feedbackHistory)
-            feedbackHistory[timestamp] = feedback
+        feedbackHistory = instance.feedbackHistory
+        feedbackHistory[timestamp] = feedback
 
-        serializer.save(name=name,
-                        description=description,
-                        CSFs=CSFs,
-                        currentMetric=currentMetric,
-                        metricHistory=metricHistory,
-                        feedback=feedback,
-                        feedbackHistory=feedbackHistory,
-                        members=members)
+        # Update the instance
+        instance.currentMetric = currentMetric
+        instance.metricHistory = metricHistory
+        instance.feedback = feedback
+        instance.feedbackHistory = feedbackHistory
+        instance.description = description
+        instance.name = name
+        instance.members = members
+        instance.save()
