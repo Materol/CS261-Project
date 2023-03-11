@@ -17,5 +17,5 @@ urlpatterns = [
     path('api/projects/create/',
          views.CreateProject.as_view(),
          name='create_project'),
-    path('api/projects/', views.ProjectList.as_view(), name='list_project'),
+    path('api/projects/<str:user_email>', views.ProjectList.as_view(), name='list_project'),
 ]

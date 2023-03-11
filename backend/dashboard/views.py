@@ -27,7 +27,16 @@ trainer.train_model(knn)
 #View for the dashboard - viewing multiple projects
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializerDashboard
-    queryset = Project.objects.all()
+    # queryset = Project.objects.all()
+
+    def get_queryset(self):
+        email = self.kwargs.get('user_email')
+
+        # Filter by owner email column `owner`
+        queryset = Project.objects.filter(owner=email)
+        return queryset
+
+
 
 
 #Create a project, calculate metrics using KNN model and store in database
@@ -43,6 +52,7 @@ class CreateProject(generics.CreateAPIView):
         metricHistory = serializer.validated_data.get('metricHistory') or None
         CSFs = serializer.validated_data.get('CSFs')
         feedback = serializer.validated_data.get('feedback') or None
+        owner = serializer.validated_data.get('owner')
 
         #Current Metric should be empty by default as there is no entry on frontend form, must be calculated
         if currentMetric is None:
@@ -57,7 +67,8 @@ class CreateProject(generics.CreateAPIView):
         if feedback is None:
             feedback = testFeedback
 
-        serializer.save(currentMetric=currentMetric,
+        serializer.save(owner=owner,
+                        currentMetric=currentMetric,
                         metricHistory=metricHistory,
                         feedback=feedback)
 

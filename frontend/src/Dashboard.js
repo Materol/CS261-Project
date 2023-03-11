@@ -35,7 +35,7 @@ export default function Dashboard(props) {
         //TODO: Filter projects to user's only
         //Get projects from backend and format to frontend values
         if(props.fetchProjects == true){
-            axiosInstance.get('/projects').then((res) => {
+            axiosInstance.get('/projects/' + props.email).then((res) => {
                 console.log("res.data:" + res.data)
                 //array of all project objects returned
                 const allProjects = res.data;
@@ -118,8 +118,8 @@ export default function Dashboard(props) {
                                                                 <Col>
                                                                     <p>{project.description}</p>
                                                                     <Button variant='info' onClick={() =>
-                                                                        navigate('/dashboard/project', 
-                                                                        { state: { 
+                                                                        navigate('/dashboard/project',
+                                                                        { state: {
                                                                             projectId: project.id,
                                                                             projectName: project.name,
                                                                             projectDescription: project.description,
@@ -145,7 +145,7 @@ export default function Dashboard(props) {
                                                                                 textColor: 'black'
                                                                             })
                                                                             }
-                                                                            value={projects[index + 1].successChance} 
+                                                                            value={projects[index + 1].successChance}
                                                                             text={`${projects[index + 1].successChance}%`}
                                                                         />
                                                                         <p className='text-center m-0 fs-10'><i>Success Chance</i></p>
@@ -153,8 +153,8 @@ export default function Dashboard(props) {
                                                                     <Col>
                                                                         <p>{projects[index + 1].description}</p>
                                                                         <Button variant='info' onClick={() =>
-                                                                            navigate('/dashboard/project', 
-                                                                            { state: { 
+                                                                            navigate('/dashboard/project',
+                                                                            { state: {
                                                                                 projectId: projects[index + 1].id,
                                                                                 projectName: projects[index + 1].name,
                                                                                 projectDescription: projects[index + 1].description,

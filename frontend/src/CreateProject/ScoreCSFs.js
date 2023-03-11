@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Form, Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState } from "react";
+import { Col, Container, Form, Row } from "react-bootstrap";
 
 
 export default function ScoreCSFs({handleNext, data}) {
@@ -49,14 +49,18 @@ export default function ScoreCSFs({handleNext, data}) {
         setJSONCSFs(tempJSONCSFs);
 
         // toggle fade to show next question
-        setShow(false);
+        // setShow(false);
+        setCurrentIndex((prev) => prev + 1);
+        if(currentIndex === CSFs.length - 1) {
+            handleNext(CSFs);
+        }
         event.target.checked = false;
     };
 
     const handleFade = () => {
         // after fade is complete, go to next question
         if(!show) {
-            setCurrentIndex((prev) => prev + 1); 
+            setCurrentIndex((prev) => prev + 1);
             if(currentIndex === CSFs.length - 1) {
                 handleNext(CSFs);
             }
@@ -72,7 +76,7 @@ export default function ScoreCSFs({handleNext, data}) {
         return (
         <Form >
             {/* make radio buttons form  */}
-            <Form.Group 
+            <Form.Group
                 controlId="formBasicRadio"
                 className={`fade ${show ? "show" : ""}`}
                 onTransitionEnd={handleFade}
@@ -87,15 +91,15 @@ export default function ScoreCSFs({handleNext, data}) {
                         {/* make each of the radio button by mapping 1-4 */}
                         <Row className="radios">
                             {[1, 2, 3, 4, 5].map((score) => (
-                                <Col 
+                                <Col
                                     // colour based on label
                                     style={{padding: '0.5%',backgroundColor: colourMap[score]}}
                                     onClick={() => { // allows the background to be clicked instead of just the radio button
                                         const radioBtn = document.getElementById(`score-${score}`);
                                         radioBtn.click();
                                     }}
-                                >   
-                                    <Form.Check inline 
+                                >
+                                    <Form.Check inline
                                         type="radio"
                                         label={scoreLabels[score]}
                                         name={question}
@@ -114,16 +118,16 @@ export default function ScoreCSFs({handleNext, data}) {
         </Form>
         );
     };
-    
+
     return (
         <Container className="my-5">
             <Row>
                 <Col>
                 {/* render selected question and when it updates will re render */}
-                    {renderScoreForm()} 
+                    {renderScoreForm()}
                 </Col>
             </Row>
-            
+
         </Container>
     );
 }

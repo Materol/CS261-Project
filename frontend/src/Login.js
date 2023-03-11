@@ -13,7 +13,7 @@ import axiosInstance from './axiosApi';
 // login function component
 export default function Login(props) {
     // state variables
-    const [email, setEmail] = useState('');
+    // const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -32,7 +32,7 @@ export default function Login(props) {
         try {
             axiosInstance
             .post(`token/`, {
-                email: email,
+                email: props.email,
                 password: password,
             })
             //Storing tokens locally for auth
@@ -54,7 +54,7 @@ export default function Login(props) {
             setError('Password and Email did not match');
         }
         setLoading(false);
-    } 
+    }
 
     return (
         <>
@@ -66,7 +66,7 @@ export default function Login(props) {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group id="email">
                     <Form.Label className='lEmailLabel'>Email</Form.Label>
-                    <Form.Control type="email" required onChange={e => setEmail(e.target.value)} />
+                    <Form.Control type="email" required onChange={e => props.setEmail(e.target.value)} />
                     </Form.Group>
                     <Form.Group id="username">
                     <Form.Label className='rUsernameLabel'>Username</Form.Label>

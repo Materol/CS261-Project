@@ -1,20 +1,20 @@
 // component to create a new project for the user
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { CSFs } from './CSFs.js';
 import { JSONCSFs } from './JSONCSFs.js';
 import NameAndDetails from './NameAndDetails';
-import ScoreCSFs from './ScoreCSFs';
 import Review from './Review';
+import ScoreCSFs from './ScoreCSFs';
 
 
 //import axios to use backend data
 import axiosInstance from '../axiosApi';
 
 
-import '../style/CreateProj.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../style/CreateProj.css';
 // create project component
 export default function CreateProj(props) {
   // state variables
@@ -34,7 +34,7 @@ export default function CreateProj(props) {
     }
   }, []);
 
-  
+
   //Create new project and post to backend (projects/create) then navigate to dashboard
 	const createProject = (e) => {
 		e.preventDefault();
@@ -42,6 +42,7 @@ export default function CreateProj(props) {
 
 		axiosInstance
 			.post(`projects/create/`, {
+        owner: props.email,
 				name: data.name,
 				description: data.description,
 				CSFs: data.JSONCSFs,
@@ -52,6 +53,7 @@ export default function CreateProj(props) {
 				navigate('/dashboard', {replace: true});
 			});
 	};
+  
 
   //}
   // page to welcome the user and ask them to create a project
@@ -95,9 +97,3 @@ export default function CreateProj(props) {
     </>
   )
 }
-                        
-    
-    
-    
-    
-    

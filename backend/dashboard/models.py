@@ -13,6 +13,8 @@ class Project(models.Model):
     feedback = models.JSONField(default=dict)
     members = models.JSONField(default=dict)
 
+    owner = models.EmailField(default='')
+
     #Django object manager
     objects = models.Manager()
 

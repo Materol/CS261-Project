@@ -40,7 +40,6 @@ class CustomAccountManager(BaseUserManager):
 
 #New user model, template from django web
 class NewUser(AbstractBaseUser, PermissionsMixin):
-
     email = models.EmailField(_('email address'), unique=True)
     user_name = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150, blank=True)

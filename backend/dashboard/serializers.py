@@ -46,7 +46,7 @@ class CreateProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('id', 'name', 'description', 'CSFs', 'currentMetric',
-                  'metricHistory', 'feedback', 'members')
+                  'metricHistory', 'feedback', 'members', 'owner')
 
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
@@ -62,5 +62,6 @@ class CreateProjectSerializer(serializers.ModelSerializer):
                                                     instance.metricHistory)
         instance.feedback = validated_data.get('feedback', instance.feedback)
         instance.members = validated_data.get('members', instance.members)
+        instance.owner = validated_data.get('owner', instance.owner)
         instance.save()
         return instance
