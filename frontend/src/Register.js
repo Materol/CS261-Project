@@ -1,19 +1,14 @@
 // necessary imports
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./style/Register.css";
-// import { useAuth } from './AuthContext';
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState } from "react";
 import { Alert, Button, Card, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
-
-//import axios to use backend data
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "./axiosApi";
+import "./style/Register.css";
 
 // register function component
 export default function Register(props) {
   // state variables
-  // const [email, setEmail] = useState('');
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -26,7 +21,7 @@ export default function Register(props) {
     if (props.isLoggedIn) {
       navigate("/dashboard");
     }
-  }, [navigate]);
+  }, [navigate, props.isLoggedIn]);
 
   //Creates user and logs them in
   const handleSubmit = (e) => {
@@ -43,7 +38,6 @@ export default function Register(props) {
         user_name: username,
         password: password,
       })
-      //NEED TO: Change navigation to project page
       .then((res) => {
         props.setUser(username);
         props.setIsLoggedIn(true);

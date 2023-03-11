@@ -1,18 +1,12 @@
 // page to review the user's answers
 //
-import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState } from "react";
 import {
-  Button,
-  Row,
-  Col,
-  Card,
-  Container,
-  Accordion,
-  Table,
-  ListGroup,
+    Accordion, Button, Card, Col, Container, ListGroup, Row, Table
 } from "react-bootstrap";
 import { IoCreateOutline } from "react-icons/io5";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 // create project component
 export default function EditPage({ handleSubmit, setPage, data }) {
   const [name, setName] = useState(data.name);
@@ -116,6 +110,8 @@ export default function EditPage({ handleSubmit, setPage, data }) {
                             </td>
                           </tr>
                         );
+                      } else {
+                        return null;
                       }
                     })}
                   </tbody>
@@ -145,6 +141,8 @@ export default function EditPage({ handleSubmit, setPage, data }) {
                             </td>
                           </tr>
                         );
+                      } else {
+                        return null;
                       }
                     })}
                   </tbody>
@@ -174,6 +172,8 @@ export default function EditPage({ handleSubmit, setPage, data }) {
                             </td>
                           </tr>
                         );
+                      } else {
+                        return null;
                       }
                     })}
                   </tbody>
@@ -203,6 +203,8 @@ export default function EditPage({ handleSubmit, setPage, data }) {
                             </td>
                           </tr>
                         );
+                      } else {
+                        return null;
                       }
                     })}
                   </tbody>

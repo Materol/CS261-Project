@@ -1,8 +1,8 @@
 // page to get the project's name and description
-//
-import React, { useState } from "react";
-import { Form, Button, Row, Col, Container, ListGroup } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState } from "react";
+import { Button, Col, Container, Form, ListGroup, Row } from "react-bootstrap";
+
 // create project component
 export default function NameAndDetails({ handleNext, data, review }) {
   const [name, setName] = useState(data.name);

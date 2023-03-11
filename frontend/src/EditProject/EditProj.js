@@ -1,18 +1,15 @@
 // component to create a new project for the user
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import { Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosApi";
 import { CSFs } from "../CreateProject/CSFs.js";
 import { JSONCSFs } from "../CreateProject/JSONCSFs.js";
 import ScoreCSFs from "../CreateProject/ScoreCSFs";
+import "../style/CreateProj.css";
 import Details from "./Details";
 import EditPage from "./EditPage";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../style/CreateProj.css";
-
-//import axios to use backend data
-import axiosInstance from "../axiosApi";
 
 // create project component
 export default function CreateProj(props) {
@@ -46,10 +43,10 @@ export default function CreateProj(props) {
 
   // handler to check if user is already logged in
   useEffect(() => {
-    if (props.isLoggedIn == false) {
+    if (props.isLoggedIn === false) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate, props.isLoggedIn]);
 
   //Create new project and post to backend (api/projects/create) then navigate to dashboard
   const updateProject = () => {

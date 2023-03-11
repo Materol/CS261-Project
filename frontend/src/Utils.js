@@ -14,7 +14,7 @@ export function getSuccessSplit(metrics) {
   let y = 0;
   let g = 0;
   metrics.forEach((metric) => {
-    if (metric.value == 0) {
+    if (metric.value === 0) {
       e++;
     } else if (metric.value < danger) {
       r++;

@@ -2,32 +2,30 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import {
-    Accordion,
-    Button,
-    Card,
-    Col,
-    Container,
-    ListGroup,
-    OverlayTrigger,
-    Pagination,
-    Popover,
-    ProgressBar,
-    Row,
-    Table,
-    Tooltip
+  Accordion,
+  Button,
+  Card,
+  Col,
+  Container,
+  ListGroup,
+  OverlayTrigger,
+  Pagination,
+  Popover,
+  ProgressBar,
+  Row,
+  Table,
+  Tooltip
 } from "react-bootstrap";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import {
-    IoMdArrowRoundBack,
-    IoMdInformationCircleOutline
+  IoMdArrowRoundBack,
+  IoMdInformationCircleOutline
 } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "./axiosApi";
 import { MetricDescriptions } from "./MetricDescriptions";
 import "./style/ProjectView.css";
 import { getSuccessSplit, percentToColor } from "./Utils";
-
-//import axios to use backend data
-import axiosInstance from "./axiosApi";
 
 // component to view details of individual project
 export default function ProjectView(props) {
@@ -39,15 +37,17 @@ export default function ProjectView(props) {
   const [processM, setProcessM] = useState([[]]);
   const [productM, setProductM] = useState([[]]);
   const [stakeHolderM, setStakeHolderM] = useState([[]]);
-  const [overallM, setOverallM] = useState();
+  const [overallM, setOverallM] = useState(0);
+  const [overallHistory, setOverallHistory] = useState([]);
   const [processSplit, setProcessSplit] = useState([]);
   const [productSplit, setProductSplit] = useState([]);
   const [stakeHolderSplit, setStakeHolderSplit] = useState([]);
   const [generalFeedback, setGeneralFeedback] = useState("Placeholder");
+  const [generalFeedbackHistory, setGeneralFeedbackHistory] = useState([]);
   const paginationItems = [];
 
   useEffect(() => {
-    if (props.isLoggedIn == false) {
+    if (props.isLoggedIn === false) {
       navigate("/login");
     }
 
@@ -68,12 +68,6 @@ export default function ProjectView(props) {
 
     //Get project details from backend
     axiosInstance.get("projects/detail/" + projectId).then((res) => {
-      const overall = (
-        (res.data.currentMetric.overall_success / 5) *
-        100
-      ).toFixed(1);
-      setOverallM(overall);
-
       // Sort the metric history by unix timestamp newest to oldest.
       // res.data.metricHistory is a dictionary of unix timestamps to metric objects.
       var sorted_metric_history = [];
@@ -84,7 +78,7 @@ export default function ProjectView(props) {
         ]);
       }
       sorted_metric_history.sort(function (a, b) {
-        return b[0] - a[0];
+        return a[0] - b[0];
       });
       // Unpack the sorted metric history.
       sorted_metric_history = sorted_metric_history.map(function (a) {
@@ -102,12 +96,35 @@ export default function ProjectView(props) {
         ]);
       }
       sorted_feedback_history.sort(function (a, b) {
-        return b[0] - a[0];
+        return a[0] - b[0];
       });
       // Unpack the sorted feedback history.
       sorted_feedback_history = sorted_feedback_history.map(function (a) {
         return a[1];
       });
+
+      // Iterate through the sorted metric history and calculate the overall
+      // success for each.
+      setOverallHistory([]);
+      for (let i = 0; i < sorted_metric_history.length; i++) {
+        setOverallHistory((prev) => [
+          ...prev,
+          (
+            (sorted_metric_history[i].overall_success / 5) *
+            100
+          ).toFixed(1),
+        ]);
+      }
+
+      // Iterate through the sorted general feedback history for use when
+      // showing the general feedback history.
+      setGeneralFeedbackHistory([]);
+      for (let i = 0; i < sorted_feedback_history.length; i++) {
+        setGeneralFeedbackHistory((prev) => [
+          ...prev,
+          sorted_feedback_history[i].overall_success,
+        ]);
+      }
 
       // Update the members.
       setMembers(res.data.members.members);
@@ -115,8 +132,6 @@ export default function ProjectView(props) {
       // Console log the sorted metric history.
       console.log("sorted_metric_history");
       console.log(sorted_metric_history);
-
-      setGeneralFeedback(res.data.feedback.overall_success);
 
       setProcessM([]);
       setProductM([]);
@@ -225,25 +240,37 @@ export default function ProjectView(props) {
         ]);
       }
     });
-  }, []);
+  }, [navigate, overallHistory, projectId, props.isLoggedIn]);
+
+  // Update the overallM using the overallHistory.
+  useEffect(() => {
+    setOverallM(overallHistory[overallHistory.length - 1 - activeMetric]);
+  }, [activeMetric, overallHistory]);
+
+  // Update the generalFeedbackM using the generalFeedbackHistory.
+  useEffect(() => {
+    setGeneralFeedback(
+      generalFeedbackHistory[generalFeedbackHistory.length - 1 - activeMetric]
+    );
+  }, [activeMetric, generalFeedbackHistory]);
 
   useEffect(() => {
     setProcessSplit(
       getSuccessSplit(processM[processM.length - 1 - activeMetric])
     );
-  }, [processM]);
+  }, [activeMetric, processM]);
 
   useEffect(() => {
     setProductSplit(
       getSuccessSplit(productM[productM.length - 1 - activeMetric])
     );
-  }, [productM]);
+  }, [activeMetric, productM]);
 
   useEffect(() => {
     setStakeHolderSplit(
       getSuccessSplit(stakeHolderM[stakeHolderM.length - 1 - activeMetric])
     );
-  }, [stakeHolderM]);
+  }, [activeMetric, stakeHolderM]);
 
   const renderTooltip = (props) => {
     return (
@@ -294,7 +321,7 @@ export default function ProjectView(props) {
     paginationItems.push(
       <Pagination.Item
         key={i}
-        active={activeMetric == len - i}
+        active={activeMetric === len - i}
         onClick={() => setActiveMetric(len - i)}
       >
         {len - i}
@@ -552,7 +579,7 @@ export default function ProjectView(props) {
                                 key={index}
                                 style={{
                                   backgroundColor:
-                                    metric.value != 0 &&
+                                    metric.value !== 0 &&
                                     percentToColor(
                                       ((metric.value - 1) / 4) * 100
                                     ),

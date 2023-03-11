@@ -31,7 +31,7 @@ function App() {
     localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
     localStorage.setItem("user", user);
     localStorage.setItem("email", email);
-  }, [isLoggedIn]);
+  }, [email, fetchProjects, isLoggedIn, user]);
   // render
   return (
     <div className="App">

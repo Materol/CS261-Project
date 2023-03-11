@@ -1,18 +1,16 @@
 // component to create a new project for the user
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
-import { Col, Container, ListGroup, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosApi";
+import "../style/CreateProj.css";
 import { CSFs } from "./CSFs.js";
 import { JSONCSFs } from "./JSONCSFs.js";
 import NameAndDetails from "./NameAndDetails";
 import Review from "./Review";
 import ScoreCSFs from "./ScoreCSFs";
 
-//import axios to use backend data
-import axiosInstance from "../axiosApi";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../style/CreateProj.css";
 // create project component
 export default function CreateProj(props) {
   // state variables
@@ -33,10 +31,10 @@ export default function CreateProj(props) {
 
   // handler to check if user is already logged in
   useEffect(() => {
-    if (props.isLoggedIn == false) {
+    if (props.isLoggedIn === false) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate, props.isLoggedIn]);
 
   //Create new project and post to backend (projects/create) then navigate to dashboard
   const createProject = (e) => {
@@ -60,7 +58,7 @@ export default function CreateProj(props) {
   // page to welcome the user and ask them to create a project
 
   const handleNext = (newData) => {
-    if (currentPage == 1) setReview(true);
+    if (currentPage === 1) setReview(true);
     if (!review) setCurrentPage((prevPage) => prevPage + 1);
     else setCurrentPage(2);
     setData((prevData) => ({ ...prevData, ...newData }));

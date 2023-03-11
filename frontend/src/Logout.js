@@ -26,7 +26,7 @@ export default function Logout(props) {
     }
     props.setIsLoggedIn(false);
     navigate("/login", { replace: true });
-  }, []);
+  }, [navigate, props]);
 
   return (
     <div>

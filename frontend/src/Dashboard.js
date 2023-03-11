@@ -21,7 +21,7 @@ export default function Dashboard(props) {
 
   // handler to check if user is already logged in
   useEffect(() => {
-    if (props.isLoggedIn == false) {
+    if (props.isLoggedIn === false) {
       navigate("/login");
     }
     console.log("Token: " + localStorage.getItem("access_token"));
@@ -31,7 +31,7 @@ export default function Dashboard(props) {
     // {id (int), name (string), description (string), successChance (int/100)}
 
     //Get projects from backend and format to frontend values
-    if (props.fetchProjects == true) {
+    if (props.fetchProjects === true) {
       axiosInstance.get("/projects/" + props.email).then((res) => {
         console.log("res.data:" + res.data);
         //array of all project objects returned
@@ -71,7 +71,7 @@ export default function Dashboard(props) {
       });
       props.setFetchProjects(true);
     }
-  }, [props.fetchProjects]);
+  }, [navigate, props, props.fetchProjects]);
 
   if (isLoading) {
     return (
@@ -115,12 +115,12 @@ export default function Dashboard(props) {
             New Project
           </Button>
         </div>
-        {projects.length != 0 ? (
+        {projects.length !== 0 ? (
           <Carousel variant="dark" className="projectsSlider">
             {
               // map through projects and pair projects into rows of 2 if possible, otherwise put them in a row of 1
               projects.map((project, index) => {
-                if (index % 2 == 0) {
+                if (index % 2 === 0) {
                   return (
                     <Carousel.Item key={project.id}>
                       <Row
@@ -227,6 +227,8 @@ export default function Dashboard(props) {
                       </Row>
                     </Carousel.Item>
                   );
+                } else {
+                  return null;
                 }
               })
             }
