@@ -1,12 +1,12 @@
 // create dashbaord component
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, Row, Col, Carousel, Button, Spinner } from 'react-bootstrap';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import { percentToColor } from './Utils';
-import './style/Dashboard.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { Button, Card, Carousel, Col, Row, Spinner } from 'react-bootstrap';
+import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { useNavigate } from 'react-router-dom';
+import './style/Dashboard.css';
+import { percentToColor } from './Utils';
 // dashboard component
 
 //import axios to use backend data
@@ -32,7 +32,6 @@ export default function Dashboard(props) {
         // store in following format into projects via 'setProjects':
         // {id (int), name (string), description (string), successChance (int/100)}
 
-        //TODO: Filter projects to user's only
         //Get projects from backend and format to frontend values
         if(props.fetchProjects == true){
             axiosInstance.get('/projects/' + props.email).then((res) => {
@@ -48,7 +47,9 @@ export default function Dashboard(props) {
                 allProjects.forEach(myFunction);
 
                 function myFunction(item){
-                    tempProject = {id: item.id, name: item.name, description: item.description, successChance:0};
+                    console.log("item: " + item);
+                    const overall = ((item.currentMetric.overall_success/5) * 100).toFixed(1);
+                    tempProject = {id: item.id, name: item.name, description: item.description, successChance: overall};
                     tempProjects.push(tempProject)
                 }
                 console.log("tempProjects:")
