@@ -240,37 +240,24 @@ export default function ProjectView(props) {
         ]);
       }
     });
-  }, [navigate, overallHistory, projectId, props.isLoggedIn]);
+  }, [navigate, projectId, props.isLoggedIn]);
 
   // Update the overallM using the overallHistory.
   useEffect(() => {
     setOverallM(overallHistory[overallHistory.length - 1 - activeMetric]);
-  }, [activeMetric, overallHistory]);
-
-  // Update the generalFeedbackM using the generalFeedbackHistory.
-  useEffect(() => {
     setGeneralFeedback(
       generalFeedbackHistory[generalFeedbackHistory.length - 1 - activeMetric]
     );
-  }, [activeMetric, generalFeedbackHistory]);
-
-  useEffect(() => {
     setProcessSplit(
       getSuccessSplit(processM[processM.length - 1 - activeMetric])
     );
-  }, [activeMetric, processM]);
-
-  useEffect(() => {
     setProductSplit(
       getSuccessSplit(productM[productM.length - 1 - activeMetric])
     );
-  }, [activeMetric, productM]);
-
-  useEffect(() => {
     setStakeHolderSplit(
       getSuccessSplit(stakeHolderM[stakeHolderM.length - 1 - activeMetric])
     );
-  }, [activeMetric, stakeHolderM]);
+  }, [activeMetric, generalFeedbackHistory, overallHistory, processM, productM, stakeHolderM]);
 
   const renderTooltip = (props) => {
     return (
