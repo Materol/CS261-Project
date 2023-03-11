@@ -12,6 +12,9 @@ import Register from './Register';
 
 function App() {
   // store state in local storage to prevent loss after mounting (refresh/redirect)
+  const [fetchProjects, setFetchProjects] = useState(
+    JSON.parse(localStorage.getItem('fetchProjects')) || true
+  );
   const [isLoggedIn, setIsLoggedIn] = useState(
     JSON.parse(localStorage.getItem('isLoggedIn')) || false
   );
@@ -20,23 +23,25 @@ function App() {
   );
   // when mounting, check if user is logged in in local storage and update state
   useEffect(() => {
+    localStorage.setItem('fetchProjects', JSON.stringify(fetchProjects));
     localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+    localStorage.setItem('user', user);
   }, [isLoggedIn]);
   // render
   return (
     <div className='App'>
       <Router>
-        <NavBar isLoggedIn={isLoggedIn} user={user} />
+        <NavBar isLoggedIn={isLoggedIn} setFetchProjects={setFetchProjects} user={user} />
         <Routes>
           <Route path='/' element={<h1>Home</h1>} />
-          <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />} exact />
-          <Route path='/register' element={<Register setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}  exact />
-          <Route path='/dashboard' element={<Dashboard isLoggedIn={isLoggedIn} user={user} />} exact />
-          <Route path='/dashboard/createproject' element={<CreateProj isLoggedIn={isLoggedIn} />} exact />
+          <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} setFetchProjects={setFetchProjects} setUser={setUser} isLoggedIn={isLoggedIn} />} exact />
+          <Route path='/register' element={<Register setIsLoggedIn={setIsLoggedIn} setFetchProjects={setFetchProjects} setUser={setUser} isLoggedIn={isLoggedIn} />}  exact />
+          <Route path='/dashboard' element={<Dashboard fetchProjects={fetchProjects} setFetchProjects={setFetchProjects} isLoggedIn={isLoggedIn} user={user} />} exact />
+          <Route path='/dashboard/createproject' element={<CreateProj setFetchProjects={setFetchProjects} isLoggedIn={isLoggedIn} />} exact />
           <Route path='/dashboard/project' element={<ProjectView isLoggedIn={isLoggedIn} />} exact />
-          <Route path='/dashboard/project/edit' element={<EditProj isLoggedIn={isLoggedIn} />} exact />
-          <Route path='/dashboard/project/delete' element={<Delete />} exact />
-          <Route path='/logout' element={<Logout setIsLoggedIn={setIsLoggedIn} />} exact />
+          <Route path='/dashboard/project/edit' element={<EditProj setFetchProjects={setFetchProjects} isLoggedIn={isLoggedIn} />} exact />
+          <Route path='/dashboard/project/delete' element={<Delete setFetchProjects={setFetchProjects} />} exact />
+          <Route path='/logout' element={<Logout setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} exact />
         </Routes>
       </Router>
     </div>

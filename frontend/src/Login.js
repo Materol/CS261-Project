@@ -43,14 +43,14 @@ export default function Login(props) {
                 axiosInstance.defaults.headers['Authorization'] = 'JWT ' + localStorage.getItem('access_token');
                 //If good, navigate to dashboard
                 //navigate('/dashboard');
+                props.setIsLoggedIn(true);
+                props.setUser(username);
+                //If good, navigate to dashboard
+                props.setFetchProjects(true);
+                navigate('/dashboard');
             });
-            props.setIsLoggedIn(true);
-            props.setUser(username);
-
-            //If good, navigate to dashboard
-            navigate('/dashboard');
-
         } catch {
+            console.log("Error");
             setError('Password and Email did not match');
         }
         setLoading(false);
@@ -87,7 +87,6 @@ export default function Login(props) {
             <div className="w-100 text-center mt-2">
                 Need an account? <Link to="/register">Register</Link>
             </div>
-            <Button onClick={() => {props.setIsLoggedIn(!props.isLoggedIn); navigate('/dashboard');}}>Debug Login</Button>
         </div>
         </>
     );

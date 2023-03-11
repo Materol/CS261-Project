@@ -7,12 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-
-//import axios to use backend data
-import axiosInstance from './axiosApi';
-
-
-
 //import axios to use backend data
 import axiosInstance from './axiosApi';
 
@@ -54,6 +48,7 @@ export default function Register(props) {
             .then((res) => {
                 props.setUser(username)
                 props.setIsLoggedIn(true);
+                props.setFetchProjects(true);
                 navigate('/dashboard');
             });
     };

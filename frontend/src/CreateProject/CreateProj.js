@@ -48,7 +48,8 @@ export default function CreateProj(props) {
 				members: {"members":data.members},
 			})
 			.then((res) => {
-				navigate('/dashboard');
+        props.setFetchProjects(true);
+				navigate('/dashboard', {replace: true});
 			});
 	};
 

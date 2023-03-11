@@ -13,26 +13,22 @@ export function getSuccessSplit (metrics){
     let r = 0;
     let y = 0;
     let g = 0;
-    console.log("Pre-Calc: " + metrics.length);
     metrics.forEach(metric => {
-        if(metric.MetricScore == 0){
-            console.log("Got 0")
+        if(metric.value == 0){
             e++;
         }
-        else if(metric.MetricScore < danger){
+        else if(metric.value < danger){
             r++;
-        } else if(metric.MetricScore < warning){
+        } else if(metric.value < warning){
             y++;
         } else {
             g++;
         }
     });
     const total = e + r + y + g;
-    console.log("Total: " + total);
     r = ((r/total)*100);
     y = ((y/total)*100);
     g = ((g/total)*100);
-    console.log("Post-Exit: " + [r, y, g]);
     return [r, y, g];
 }
 

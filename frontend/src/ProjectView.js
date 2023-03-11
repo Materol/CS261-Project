@@ -5,6 +5,7 @@ import { percentToColor, getSuccessSplit } from './Utils';
 import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
 import {IoMdArrowRoundBack, IoMdInformationCircleOutline} from 'react-icons/io';
 import { Button, Container, Row, Col, Card, ListGroup, ProgressBar, Accordion, Table, OverlayTrigger, Tooltip, Popover, Pagination} from 'react-bootstrap';
+import { MetricDescriptions } from './MetricDescriptions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style/ProjectView.css';
 
@@ -17,8 +18,7 @@ export default function ProjectView(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const { projectId, projectName, projectDescription } = location.state;
-    const[members, setMembers] = useState(['John', 'Jane', 'Joe']);
-    const [metrics, setMetrics] = useState([]);
+    const [members, setMembers] = useState(['John', 'Jane', 'Joe']);
     const [activeMetric, setActiveMetric] = useState(0);
     const [processM, setProcessM] = useState([[]]);
     const [productM, setProductM] = useState([[]]);
@@ -28,7 +28,10 @@ export default function ProjectView(props) {
     const [productSplit, setProductSplit] = useState([]);
     const [stakeHolderSplit, setStakeHolderSplit] = useState([]);
     const [generalFeedback, setGeneralFeedback] = useState("Placeholder");
-    let paginationItems = [];
+    const paginationItems = [];
+
+
+
 
     useEffect(() => {
         if (props.isLoggedIn == false) {
@@ -42,68 +45,49 @@ export default function ProjectView(props) {
         // e.g. [0] is oldest, [-1] is newest. Means you can just .push updates to the 'history' list.
         // then they can be split up, first 4 are process, next 10 are product and last 3 are stakeholder.
 
-
         //TODO: Format returned project data and set in projects
 
         //Get project details from backend
         axiosInstance.get('projects/detail/' + projectId).then((res) => {
-			console.log(res.data);
-		});
-
-
-        setProcessM([
-            [{MetricDescription: 'Metric 1', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 2', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 3', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 4', MetricScore: 3.5, Feedback: 'Placeholder'}],
-            [{MetricDescription: 'Metric 4', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 3', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 2', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 1', MetricScore: 3.5, Feedback: 'Placeholder'}],
-        ]);
-        setProductM([
-            [{MetricDescription: 'Metric 1', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 2', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 3', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 4', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 5', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 6', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 7', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 8', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 9', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 10', MetricScore: 3.5, Feedback: 'Placeholder'}],
-            [{MetricDescription: 'Metric 10', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 9', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 8', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 7', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 6', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 5', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 4', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 3', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 2', MetricScore: 2.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 1', MetricScore: 3.5, Feedback: 'Placeholder'}]
-        ]);
-        setStakeHolderM([
-            [{MetricDescription: 'Metric 1', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 2', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 3', MetricScore: 2.5, Feedback: 'Placeholder'}],
-            [{MetricDescription: 'Metric 3', MetricScore: 3.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 2', MetricScore: 4.5, Feedback: 'Placeholder'},
-            {MetricDescription: 'Metric 1', MetricScore: 2.5, Feedback: 'Placeholder'}]
-        ]);
-        setOverallM(40);
+            const overall = ((res.data.currentMetric.overall_success/5) * 100).toFixed(1);
+            setOverallM(overall);
+            // for (let i = 0; i < res.data.metricHistory.length; i++) {
+            //     console.log("check");
+            const metricValues = res.data.metricHistory;
+            const metricFeedback = res.data.feedback;
+            setProcessM([])
+            setProductM([])
+            setStakeHolderM([])
+            setProcessM((prev) => [...prev, [{value: metricValues.budget, feedback: metricFeedback.budget, description: MetricDescriptions.budget }, 
+                                            {value: metricValues.schedule, feedback: metricFeedback.schedule, description: MetricDescriptions.schedule}, 
+                                            {value: metricValues.scope, feedback: metricFeedback.scope, description: MetricDescriptions.scope},
+                                            {value: metricValues.team_building_and_dynamics, feedback: metricFeedback.team_building_and_dynamics, description: MetricDescriptions.team_building_and_dynamics}]]);
+            setProductM((prev) => [...prev, [{value: metricValues.overall_quality, feedback: metricFeedback.overall_quality, description: MetricDescriptions.overall_quality},
+                                            {value: metricValues.business_and_revenue_generated, feedback: metricFeedback.business_and_revenue_generated, description: MetricDescriptions.business_and_revenue_generated},
+                                            {value: metricValues.functional_suitability, feedback: metricFeedback.functional_suitability, description: MetricDescriptions.functional_suitability},
+                                            {value: metricValues.reliability, feedback: metricFeedback.reliability, description: MetricDescriptions.reliability},
+                                            {value: metricValues.performance_efficiency, feedback: metricFeedback.performance_efficiency, description: MetricDescriptions.performance_efficiency},
+                                            {value: metricValues.operability, feedback: metricFeedback.operability, description: MetricDescriptions.operability},
+                                            {value: metricValues.security, feedback: metricFeedback.security, description: MetricDescriptions.security},
+                                            {value: metricValues.compatibility, feedback: metricFeedback.compatibility, description: MetricDescriptions.compatibility},
+                                            {value: metricValues.maintainability, feedback: metricFeedback.maintainability, description: MetricDescriptions.maintainability},
+                                            {value: metricValues.transferability, feedback: metricFeedback.transferability, description: MetricDescriptions.transferability}]]);
+            setStakeHolderM((prev) => [...prev, [{value: metricValues.user_satisfaction, feedback: metricFeedback.user_satisfaction, description: MetricDescriptions.user_satisfaction},
+                                                {value: metricValues.team_satisfaction, feedback: metricFeedback.team_satisfaction, description: MetricDescriptions.team_satisfaction},
+                                                {value: metricValues.top_management_satisfaction, feedback: metricFeedback.top_management_satisfaction, description: MetricDescriptions.top_management_satisfaction}]]);
+		}); 
     }, []);
 
     useEffect(() => {
-        setProcessSplit(getSuccessSplit(processM));
+        setProcessSplit(getSuccessSplit(processM[(processM.length-1) - activeMetric]));
     }, [processM]);
       
     useEffect(() => {
-        setProductSplit(getSuccessSplit(productM));
+        setProductSplit(getSuccessSplit(productM[(productM.length-1) - activeMetric]));
     }, [productM]);
     
     useEffect(() => {
-        setStakeHolderSplit(getSuccessSplit(stakeHolderM));
+        setStakeHolderSplit(getSuccessSplit(stakeHolderM[(stakeHolderM.length-1) - activeMetric]));
     }, [stakeHolderM]);
 
     const renderTooltip = (props) => {
@@ -154,7 +138,7 @@ export default function ProjectView(props) {
                                 <h1>{projectName} 🚀</h1>
                                 <Button className='editProj' variant='success' onClick={() => navigate('/dashboard/project/edit', 
                                                                                                         { state: { 
-                                                                                                            projectId: projectId,
+                                                                                                            projectID: projectId,
                                                                                                             projectName: projectName,
                                                                                                             projectDescription: projectDescription,
                                                                                                             projectMembers: members
@@ -308,9 +292,9 @@ export default function ProjectView(props) {
                             
                             <Accordion alwaysOpen flush>
                             {[
-                                { metrics: processM[activeMetric], header: 'Process Metrics' },
-                                { metrics: productM[activeMetric], header: 'Product Metrics' },
-                                { metrics: stakeHolderM[activeMetric], header: 'Stakeholder Metrics' }
+                                { metrics: processM[(processM.length-1) - activeMetric], header: 'Process Metrics' },
+                                { metrics: productM[(productM.length-1) - activeMetric], header: 'Product Metrics' },
+                                { metrics: stakeHolderM[(stakeHolderM.length-1) - activeMetric], header: 'Stakeholder Metrics' }
                             ].map(({ metrics, header }, index) => (
                                 <Accordion.Item key={index} eventKey={index.toString()}>
                                 <Accordion.Header>{header}</Accordion.Header>
@@ -325,10 +309,10 @@ export default function ProjectView(props) {
                                         </thead>
                                         <tbody>
                                             {metrics.map((metric, index) => (
-                                            <tr key={index} style={{ backgroundColor: (metric.MetricScore!=0) && percentToColor(((metric.MetricScore-1)/4)*100)}}>
-                                                <td>{metric.MetricDescription}</td>
-                                                <td>{metric.MetricScore}</td>
-                                                <td>{metric.Feedback}</td>
+                                            <tr key={index} style={{ backgroundColor: (metric.value!=0) && percentToColor(((metric.value-1)/4)*100)}}>
+                                                <td>{metric.description}</td>
+                                                <td>{metric.value}</td>
+                                                <td>{metric.feedback}</td>
                                             </tr>
                                             ))}
                                         </tbody>

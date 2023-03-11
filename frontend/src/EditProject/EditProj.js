@@ -25,8 +25,8 @@ export default function CreateProj(props) {
   const JSONCSF = JSONCSFs
   // state variables
   const [currentPage, setCurrentPage] = useState(0);
-  console.log("MEMBERS: " + location.projectMembers)
-  const {projectName, projectDescription, projectMembers} = location.state;
+  const {projectName, projectDescription, projectMembers, projectID} = location.state;
+  console.log("projectName: " + projectName + " projectDescription: " + projectDescription + " projectMembers: " + projectMembers + " projectID: " + projectID)
   const [data, setData] = useState({name: projectName, description: projectDescription, CSFs: CSF,  JSONCSFs: JSONCSF, members: projectMembers});
   const pageTitles = ["Edit", "CSFs", "Name and Description"];
 
@@ -39,15 +39,16 @@ export default function CreateProj(props) {
 
   //Create new project and post to backend (api/projects/create) then navigate to dashboard
 	const updateProject = () => {
-		
+		console.log("DATA: " + data.name + " " + data.description + " " + data.JSONCSFs + " " + data.members)
 		axiosInstance
-			.post(`projects/edit/projectdetail` + projectID, {
+			.post(`/projects/update/` + projectID, {
 				name: data.name,
 				description: data.description,
 				CSFs: data.JSONCSFs,
 				members: {"members":data.members},
 			})
 			.then((res) => {
+        props.setFetchProjects(true);
 				navigate('/dashboard');
 			});
 	};

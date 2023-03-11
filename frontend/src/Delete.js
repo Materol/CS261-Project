@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 //import axios to use backend data
 import axiosInstance from './axiosApi';
 
-export default function Delete() {
+export default function Delete(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const id = location.state.id
@@ -14,7 +14,7 @@ export default function Delete() {
     useEffect(() => {
         // delete the project through django using project id, then redirect to dashboard.
 		axiosInstance.delete('admin/delete/' + id);
+        props.setFetchProjects(true);
         navigate('/dashboard', { replace: true });
-
     }, []);
 }

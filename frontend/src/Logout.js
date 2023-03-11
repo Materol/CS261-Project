@@ -7,11 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import axiosInstance from './axiosApi';
 
 
-
-//import axios to use backend data
-import axiosInstance from './axiosApi';
-
-
 export default function Logout(props) {
     const navigate = useNavigate();
 

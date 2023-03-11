@@ -8,7 +8,7 @@ export default function AuthNavBar(props) {
             <Container className='nav'>
                 <Navbar.Brand>SofTrack</Navbar.Brand>
                 <Nav className="me-auto">
-                    <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                    <Nav.Link onClick={() => props.setFetchProjects(true)} href="/dashboard">Dashboard</Nav.Link>
                     <Nav.Link href="/logout">Logout</Nav.Link>
                 </Nav>
             </Container>
