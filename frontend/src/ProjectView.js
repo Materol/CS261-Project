@@ -1,20 +1,20 @@
 // component to view details of individual project
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { percentToColor, getSuccessSplit } from './Utils';
-import { CircularProgressbar, buildStyles} from 'react-circular-progressbar';
-import {IoMdArrowRoundBack, IoMdInformationCircleOutline} from 'react-icons/io';
-import { Button, Container, Row, Col, Card, ListGroup, ProgressBar, Accordion, Table, OverlayTrigger, Tooltip, Popover, Pagination} from 'react-bootstrap';
-import { MetricDescriptions } from './MetricDescriptions';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+import { Accordion, Button, Card, Col, Container, ListGroup, OverlayTrigger, Pagination, Popover, ProgressBar, Row, Table, Tooltip } from 'react-bootstrap';
+import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
+import { IoMdArrowRoundBack, IoMdInformationCircleOutline } from 'react-icons/io';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { MetricDescriptions } from './MetricDescriptions';
 import './style/ProjectView.css';
+import { getSuccessSplit, percentToColor } from './Utils';
 
 //import axios to use backend data
 import axiosInstance from './axiosApi';
 
 // component to view details of individual project
 export default function ProjectView(props) {
-    
+
     const navigate = useNavigate();
     const location = useLocation();
     const { projectId, projectName, projectDescription } = location.state;
@@ -51,41 +51,78 @@ export default function ProjectView(props) {
         axiosInstance.get('projects/detail/' + projectId).then((res) => {
             const overall = ((res.data.currentMetric.overall_success/5) * 100).toFixed(1);
             setOverallM(overall);
-            // for (let i = 0; i < res.data.metricHistory.length; i++) {
-            //     console.log("check");
-            const metricValues = res.data.metricHistory;
-            const metricFeedback = res.data.feedback;
-            setProcessM([])
-            setProductM([])
-            setStakeHolderM([])
-            setProcessM((prev) => [...prev, [{value: metricValues.budget, feedback: metricFeedback.budget, description: MetricDescriptions.budget }, 
-                                            {value: metricValues.schedule, feedback: metricFeedback.schedule, description: MetricDescriptions.schedule}, 
-                                            {value: metricValues.scope, feedback: metricFeedback.scope, description: MetricDescriptions.scope},
-                                            {value: metricValues.team_building_and_dynamics, feedback: metricFeedback.team_building_and_dynamics, description: MetricDescriptions.team_building_and_dynamics}]]);
-            setProductM((prev) => [...prev, [{value: metricValues.overall_quality, feedback: metricFeedback.overall_quality, description: MetricDescriptions.overall_quality},
-                                            {value: metricValues.business_and_revenue_generated, feedback: metricFeedback.business_and_revenue_generated, description: MetricDescriptions.business_and_revenue_generated},
-                                            {value: metricValues.functional_suitability, feedback: metricFeedback.functional_suitability, description: MetricDescriptions.functional_suitability},
-                                            {value: metricValues.reliability, feedback: metricFeedback.reliability, description: MetricDescriptions.reliability},
-                                            {value: metricValues.performance_efficiency, feedback: metricFeedback.performance_efficiency, description: MetricDescriptions.performance_efficiency},
-                                            {value: metricValues.operability, feedback: metricFeedback.operability, description: MetricDescriptions.operability},
-                                            {value: metricValues.security, feedback: metricFeedback.security, description: MetricDescriptions.security},
-                                            {value: metricValues.compatibility, feedback: metricFeedback.compatibility, description: MetricDescriptions.compatibility},
-                                            {value: metricValues.maintainability, feedback: metricFeedback.maintainability, description: MetricDescriptions.maintainability},
-                                            {value: metricValues.transferability, feedback: metricFeedback.transferability, description: MetricDescriptions.transferability}]]);
-            setStakeHolderM((prev) => [...prev, [{value: metricValues.user_satisfaction, feedback: metricFeedback.user_satisfaction, description: MetricDescriptions.user_satisfaction},
-                                                {value: metricValues.team_satisfaction, feedback: metricFeedback.team_satisfaction, description: MetricDescriptions.team_satisfaction},
-                                                {value: metricValues.top_management_satisfaction, feedback: metricFeedback.top_management_satisfaction, description: MetricDescriptions.top_management_satisfaction}]]);
-		}); 
+
+            // Sort the metric history by unix timestamp newest to oldest.
+            // res.data.metricHistory is a dictionary of unix timestamps to metric objects.
+            var sorted_metric_history = [];
+            for (var timestamp in res.data.metricHistory) {
+                sorted_metric_history.push([timestamp, res.data.metricHistory[timestamp]]);
+            }
+            sorted_metric_history.sort(function(a, b) {
+                return b[0] - a[0];
+            });
+            // Unpack the sorted metric history.
+            sorted_metric_history = sorted_metric_history.map(function(a) {
+                return a[1];
+            });
+
+            // Sort the feedback history by unix timestamp newest to oldest.
+            // res.data.feedbackHistory is a dictionary of unix timestamps to feedback objects.
+            var sorted_feedback_history = [];
+            for (timestamp in res.data.feedbackHistory) {
+                sorted_feedback_history.push([timestamp, res.data.feedbackHistory[timestamp]]);
+            }
+            sorted_feedback_history.sort(function(a, b) {
+                return b[0] - a[0];
+            });
+            // Unpack the sorted feedback history.
+            sorted_feedback_history = sorted_feedback_history.map(function(a) {
+                return a[1];
+            });
+
+            // Update the members.
+            setMembers(res.data.members.members);
+
+            // Console log the sorted metric history.
+            console.log("sorted_metric_history");
+            console.log(sorted_metric_history);
+
+            setGeneralFeedback(res.data.feedback.overall_success);
+
+            setProcessM([]);
+            setProductM([]);
+            setStakeHolderM([]);
+            for (let i = 0; i < sorted_metric_history.length; i++) {
+                setProcessM((prev) => [...prev, [{value: sorted_metric_history[i].budget, feedback: sorted_feedback_history[i].budget, description: MetricDescriptions.budget },
+                                                {value: sorted_metric_history[i].schedule, feedback: sorted_feedback_history[i].schedule, description: MetricDescriptions.schedule},
+                                                {value: sorted_metric_history[i].scope, feedback: sorted_feedback_history[i].scope, description: MetricDescriptions.scope},
+                                                {value: sorted_metric_history[i].team_building_and_dynamics, feedback: sorted_feedback_history[i].team_building_and_dynamics, description: MetricDescriptions.team_building_and_dynamics}]]);
+                setProductM((prev) => [...prev, [{value: sorted_metric_history[i].overall_quality, feedback: sorted_feedback_history[i].overall_quality, description: MetricDescriptions.overall_quality},
+                                                {value: sorted_metric_history[i].business_and_revenue_generated, feedback: sorted_feedback_history[i].business_and_revenue_generated, description: MetricDescriptions.business_and_revenue_generated},
+                                                {value: sorted_metric_history[i].functional_suitability, feedback: sorted_feedback_history[i].functional_suitability, description: MetricDescriptions.functional_suitability},
+                                                {value: sorted_metric_history[i].reliability, feedback: sorted_feedback_history[i].reliability, description: MetricDescriptions.reliability},
+                                                {value: sorted_metric_history[i].performance_efficiency, feedback: sorted_feedback_history[i].performance_efficiency, description: MetricDescriptions.performance_efficiency},
+                                                {value: sorted_metric_history[i].operability, feedback: sorted_feedback_history[i].operability, description: MetricDescriptions.operability},
+                                                {value: sorted_metric_history[i].security, feedback: sorted_feedback_history[i].security, description: MetricDescriptions.security},
+                                                {value: sorted_metric_history[i].compatibility, feedback: sorted_feedback_history[i].compatibility, description: MetricDescriptions.compatibility},
+                                                {value: sorted_metric_history[i].maintainability, feedback: sorted_feedback_history[i].maintainability, description: MetricDescriptions.maintainability},
+                                                {value: sorted_metric_history[i].transferability, feedback: sorted_feedback_history[i].transferability, description: MetricDescriptions.transferability}]]);
+                setStakeHolderM((prev) => [...prev, [{value: sorted_metric_history[i].user_satisfaction, feedback: sorted_feedback_history[i].user_satisfaction, description: MetricDescriptions.user_satisfaction},
+                                                    {value: sorted_metric_history[i].team_satisfaction, feedback: sorted_feedback_history[i].team_satisfaction, description: MetricDescriptions.team_satisfaction},
+                                                    {value: sorted_metric_history[i].top_management_satisfaction, feedback: sorted_feedback_history[i].top_management_satisfaction, description: MetricDescriptions.top_management_satisfaction}]]);
+            }
+
+		});
     }, []);
 
     useEffect(() => {
         setProcessSplit(getSuccessSplit(processM[(processM.length-1) - activeMetric]));
     }, [processM]);
-      
+
     useEffect(() => {
         setProductSplit(getSuccessSplit(productM[(productM.length-1) - activeMetric]));
     }, [productM]);
-    
+
     useEffect(() => {
         setStakeHolderSplit(getSuccessSplit(stakeHolderM[(stakeHolderM.length-1) - activeMetric]));
     }, [stakeHolderM]);
@@ -136,8 +173,8 @@ export default function ProjectView(props) {
                         <Col className='sections'>
                             <span className='projectTitle'>
                                 <h1>{projectName} 🚀</h1>
-                                <Button className='editProj' variant='success' onClick={() => navigate('/dashboard/project/edit', 
-                                                                                                        { state: { 
+                                <Button className='editProj' variant='success' onClick={() => navigate('/dashboard/project/edit',
+                                                                                                        { state: {
                                                                                                             projectID: projectId,
                                                                                                             projectName: projectName,
                                                                                                             projectDescription: projectDescription,
@@ -149,7 +186,7 @@ export default function ProjectView(props) {
                             </span>
                         </Col>
                     </Col>
-                    
+
                     <Col className='sections' sm={8}>
                         <h3>Project Details 📑</h3>
                         <hr />
@@ -238,7 +275,7 @@ export default function ProjectView(props) {
                                         <IoMdInformationCircleOutline size={32} style={{position: 'absolute', top: 0, right: 0}}/>
                                     </div>
                                 </OverlayTrigger>
-                                
+
                                 <h2>Process Metrics</h2>
                                 <ProgressBar className="mb-4">
                                     <ProgressBar variant="success" now={processSplit[2]} key={1} />
@@ -289,7 +326,7 @@ export default function ProjectView(props) {
                                     </div>
                                 </Col>
                             </Row>
-                            
+
                             <Accordion alwaysOpen flush>
                             {[
                                 { metrics: processM[(processM.length-1) - activeMetric], header: 'Process Metrics' },
@@ -298,7 +335,7 @@ export default function ProjectView(props) {
                             ].map(({ metrics, header }, index) => (
                                 <Accordion.Item key={index} eventKey={index.toString()}>
                                 <Accordion.Header>{header}</Accordion.Header>
-                                <Accordion.Body>    
+                                <Accordion.Body>
                                     <Table size='sm' className='tables' striped bordered>
                                         <thead>
                                             <tr>
@@ -329,6 +366,3 @@ export default function ProjectView(props) {
         </>
     )
 }
-
-
-                                

@@ -1,15 +1,15 @@
 // component to create a new project for the user
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Container, Row, Col, ListGroup } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Col, Container, ListGroup, Row } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CSFs } from '../CreateProject/CSFs.js';
 import { JSONCSFs } from '../CreateProject/JSONCSFs.js';
 import ScoreCSFs from '../CreateProject/ScoreCSFs';
 import Details from './Details';
 import EditPage from './EditPage';
 
-import '../style/CreateProj.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../style/CreateProj.css';
 
 //import axios to use backend data
 import axiosInstance from '../axiosApi';
@@ -41,7 +41,7 @@ export default function CreateProj(props) {
 	const updateProject = () => {
 		console.log("DATA: " + data.name + " " + data.description + " " + data.JSONCSFs + " " + data.members)
 		axiosInstance
-			.post(`/projects/update/` + projectID, {
+			.post('/projects/update/' + projectID + '/', {
 				name: data.name,
 				description: data.description,
 				CSFs: data.JSONCSFs,
@@ -92,9 +92,3 @@ export default function CreateProj(props) {
     </>
   )
 }
-                        
-    
-    
-    
-    
-    

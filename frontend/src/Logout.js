@@ -22,6 +22,7 @@ export default function Logout(props) {
             localStorage.clear('access_token');
             localStorage.clear('refresh_token');
             localStorage.clear('user');
+            localStorage.clear('email');
 
             axiosInstance.defaults.headers['Authorization'] = null;
             props.setIsLoggedIn(false);

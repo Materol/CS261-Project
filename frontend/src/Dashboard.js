@@ -58,7 +58,7 @@ export default function Dashboard(props) {
                 setProjects(tempProjects);
                 setIsLoading(false);
 		    });
-            props.setFetchProjects(false);
+            props.setFetchProjects(true);
         }
     }, [props.fetchProjects]);
 
