@@ -12,8 +12,10 @@ export default function Delete(props) {
 
   // when ran, delete the project
   useEffect(() => {
-    // delete the project through django using project id, then redirect to dashboard.
-    axiosInstance.delete("admin/delete/" + id);
+    // delete the project through django using project id, then redirect to
+    // dashboard.
+    // TODO add email
+    axiosInstance.delete("projects/delete/" + id + "/");
     props.setFetchProjects(true);
     navigate("/dashboard", { replace: true });
   }, [id, navigate, props]);
