@@ -7,7 +7,10 @@ Packages / Instructions:
 - Navigate to base folder
 - open 2 terminals
 
+Recommendation: use Conda to create a virtual environment.
+
 In one:
+
 - `python3 -m venv venv in one`
 - `pip install django djangorestframework djangorestframework-simplejwt django-rest-auth django-allauth django-cors-headers`
 - `pip install pyjwt==1.7.1`
@@ -18,6 +21,7 @@ In one:
 - `python backend/manage.py runserver`
 
 in another:
+
 - `cd ./frontend`
 - `npm install react`
 - `npm install --save react-circular-progressbar`
