@@ -1,3 +1,14 @@
+asana==3.1.1
+Django==4.1.7
+django-allauth==0.52.0
+django-cors-headers==3.14.0
+django-rest-auth==0.9.5
+djangorestframework==3.14.0
+djangorestframework_simplejwt==5.2.2
+lxml==4.9.2
 numpy==1.23.5
 matplotlib==3.6.3
-scikit_learn==1.2.1
+PyJWT==1.7.1
+requests==2.27.1
+rest_framework_simplejwt==0.0.1
+scikit_learn==1.2.2
